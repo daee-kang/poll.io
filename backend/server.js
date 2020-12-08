@@ -1,0 +1,33 @@
+const express = require('express')
+const mongoose = require('mongoose')
+const passport = require('passport')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+require('dotenv').config()
+
+mongoose.connect(process.env.DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+    .then(() => console.log('database connected'))
+    .catch(err => console.log(err));
+mongoose.set("useCreateIndex", true);
+mongoose.set('useFindAndModify', false);
+mongoose.connection.on('error', error => console.log(error));
+mongoose.Promise = global.Promise;
+
+require('./auth/auth')
+
+const app = express()
+app.use(cors())
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// Handle errors.
+app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.json({ error: err });
+});
+
+app.listen(8000, () => {
+    console.log('Server started.')
+});
