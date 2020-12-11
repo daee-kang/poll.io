@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 require('dotenv').config()
 
+//-------MONGODB STUFF
 mongoose.connect(process.env.DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -18,9 +19,16 @@ mongoose.Promise = global.Promise;
 
 require('./auth/auth')
 
+//-------EXPRESS STUFF
 const app = express()
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
+
+//-------REQUIRE ROUTES
+const authenticateRoute = require('./routes/authenticate')
+
+//-------LOADIN ROUTES
+app.use('/', authenticateRoute);
 
 // Handle errors.
 app.use(function (err, req, res, next) {
