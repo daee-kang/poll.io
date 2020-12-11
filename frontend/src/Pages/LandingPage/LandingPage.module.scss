@@ -1,0 +1,35 @@
+.header {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    width: 100%;
+}
+
+.logo {
+    font-family: 'Pacifico', cursive;
+    font-size: 4rem;
+    color: #ea5455;
+    padding-left: 30px;
+}
+
+.login {
+    margin-left: auto;
+    margin-right: 30px;
+    padding: 15px 30px;
+    background-color: black;
+    color: white;
+    border-radius: 17px;
+    font-size: 1.2rem;
+    border: none;
+    cursor: pointer;
+    font-family: 'Quicksand', sans-serif;
+}
+
+
+
+#landingPage {
+    display: flex;
+    background-color: #f9f7f7;
+    height: 100vh;
+    width: 100vw;
+}
