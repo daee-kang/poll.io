@@ -10,10 +10,17 @@ router.post(
     '/signup',
     passport.authenticate('signup', { session: false }),
     async (req, res, next) => {
-        res.json({
-            message: 'Signup successful',
-            user: req.user
-        });
+        UserModel.create({
+            email: req.body.email,
+            username: req.body.username,
+            password: req.body.password
+        }).then((data) => {
+            console.log(`user ${req.body.username} created`)
+            res.json(data)
+        }).catch(err => {
+            console.log(`SIGNUP ERR: ${err}`)
+            res.json(err)
+        })
     }
 );
 

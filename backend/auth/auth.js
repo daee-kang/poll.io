@@ -41,17 +41,7 @@ passport.use(
         },
         async (username, password, done) => {
             try {
-                UserModel.findOne({ username: username }, (err, res) => {
-                    if (err) return done(err)
-                    console.log(res)
-                    if (res) {
-                        //user exists
-                        return done(null, { message: "Username taken" })
-                    } else {
-                        //we are good to create
-                        return done(null, { username, password })
-                    }
-                })
+                return done(null, { username, password })
             } catch (error) {
                 console.log(error)
                 done(error);

@@ -1,3 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap');
+//font-family: 'Roboto', sans-serif;
+
+.form {
+    margin-top: 10px;
+}
+
+.label {
+    display: block;
+    text-align: left;
+    margin: 30px;
+    color: #707070;
+}
+
+.textbox {
+    display: block;
+    width: 300px;
+    padding: 22px 25px;
+    font-size: 1.2rem;
+    border-radius: 20px;
+    border: 1px solid #909090;
+    margin-top: 5px;
+    color: #202020;
+    background-color: #f9f7f7;
+    outline-width: 0;
+
+    &:focus {
+        border: 2px solid #219ebc;
+        padding: 21px 24px;
+    }
+    &:hover {
+        border: 2px solid #219ebc;
+        padding: 21px 24px;
+    }
+}
+
+.submit {
+    background: linear-gradient(90deg, rgba(234,84,85,1) 0%, rgba(224,141,28,1) 99%);
+    height: 70px;
+    width: 350px;
+    border-radius: 20px;
+    color: white;
+    border: none;
+    margin-top: 25px;
+    font-size: 1.4rem;
+    -webkit-box-shadow: 1px 3px 10px -2px rgba(0,0,0,0.54);
+    -moz-box-shadow: 1px 3px 10px -2px rgba(0,0,0,0.54);
+    box-shadow: 1px 3px 10px -2px rgba(0,0,0,0.54);
+
+    &:hover {
+        background: linear-gradient(157deg, rgba(234,84,85,1) 0%, rgba(224,141,28,1) 59%);
+        margin-top: 26px;
+        cursor: pointer;
+        -webkit-box-shadow: 1px 0px 10px -2px rgba(0,0,0,0.54);
+        -moz-box-shadow: 1px 0px 10px -2px rgba(0,0,0,0.54);
+        box-shadow: 1px 0px 10px -2px rgba(0,0,0,0.54);
+    }
+}
+
 .header {
     display: flex;
     align-items: center;
@@ -10,11 +69,23 @@
     font-size: 4rem;
     color: #ea5455;
     padding-left: 30px;
+    text-decoration: none;
 }
 
-.login {
+.buttonContainer {
     margin-left: auto;
-    margin-right: 30px;
+}
+
+.title {
+    font-family: 'Roboto', sans-serif;
+    font-size: 5rem;
+    margin-top: 50px;
+    color: #202020;
+}
+
+.signup {
+    margin-left: auto;
+    margin-right: 20px;
     padding: 15px 30px;
     background-color: black;
     color: white;
@@ -23,13 +94,48 @@
     border: none;
     cursor: pointer;
     font-family: 'Quicksand', sans-serif;
+    width: 150px;
+    border: 1px solid black;
+    text-decoration: none;
+
+    &:hover {
+        background-color: #f9f7f7;
+        color: #ea5455;
+        border: 1px solid #ea5455;
+    }
 }
 
+.buttonActive {
+    background-color: #f9f7f7;
+    color: #ea5455;
+    border: 1px solid #ea5455;
+}
 
+.error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(237, 173, 173);
+    border: 2px dashed rgb(247, 52, 52);
+    border-radius: 15px;
+    margin-top: 10px;
+    width: 350px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.hide {
+    visibility: hidden;
+}
 
 #landingPage {
+    height: 100%;
+    width: 100%;
+}
+
+#signupPage {
     display: flex;
-    background-color: #f9f7f7;
-    height: 100vh;
-    width: 100vw;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
 }

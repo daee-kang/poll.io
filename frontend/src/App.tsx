@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter, Route, Link, Redirect, Switch } from 'react-router-dom'
 import Auth from './Auth'
 import LandingPage from './Pages/LandingPage/LandingPage'
+import { LANDINGPAGESTATE } from './Types'
 
 type RenderProps = {
   component: ElementType
@@ -60,6 +61,8 @@ function App() {
     <div className="App">
       <Switch>
         <LoggedOutRoute path="/" exact component={LandingPage} />
+        <LoggedOutRoute path="/login" component={LandingPage} state={LANDINGPAGESTATE.LOGIN} />
+        <LoggedOutRoute path="/signup" component={LandingPage} state={LANDINGPAGESTATE.SIGNUP} />
       </Switch>
     </div>
   );
