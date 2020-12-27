@@ -34,6 +34,7 @@ router.post(
                     if (err || !user) {
                         const error = new Error('An error occurred.');
 
+                        console.log(`LOGIN ERR: ${error}`)
                         return next(error);
                     }
 
@@ -50,6 +51,7 @@ router.post(
                         }
                     );
                 } catch (error) {
+                    console.log(`LOGIN ERR: ${error}`)
                     return next(error);
                 }
             }

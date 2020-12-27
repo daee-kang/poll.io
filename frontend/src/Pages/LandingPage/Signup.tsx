@@ -81,8 +81,7 @@ export default function Signup(): ReactElement {
     return (
         <div id={styles.signupPage}>
             <div className={styles.title}>
-                Sign up,
-                <br />start polling 😎
+                Start polling 😎
             </div>
             <div className={`${styles.error} ${error === "" ? styles.hide : null}`}>
                 {error}
