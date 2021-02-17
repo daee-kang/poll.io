@@ -1,17 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import SignIn from './AuthScreens/SignIn';
-import SignUp from './AuthScreens/SignUp';
+import * as Font from 'expo-font';
+import AppLoading from 'expo-app-loading';
 
 import { AuthContext } from './context';
-
-const AuthStack = createStackNavigator();
-const Tabs = createBottomTabNavigator();
+import RootNav from './RootNav';
 
 //navigator type exports
 export type AuthStackParamList = {
@@ -19,125 +11,27 @@ export type AuthStackParamList = {
   SignUp: undefined;
 };
 
+//async function for fetch fonts
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'roboto-slab-bold': require('./assets/Fonts/RobotoSlab-Bold.ttf'),
+    'roboto-slab': require('./assets/Fonts/RobotoSlab-Regular.ttf'),
+    'roboto-slab-light': require('./assets/Fonts/RobotoSlab-Light.ttf')
+  });
+};
+
 export default function App() {
-  //taken from https://reactnavigation.org/docs/auth-flow/
-  const [state, dispatch] = React.useReducer(
-    (prevState: any, action: any) => {
-      switch (action.type) {
-        case 'RESTORE_TOKEN':
-          return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false,
-          };
-        case 'SIGN_IN':
-          return {
-            ...prevState,
-            isSignout: false,
-            userToken: action.token,
-          };
-        case 'SIGN_OUT':
-          return {
-            ...prevState,
-            isSignout: true,
-            userToken: null,
-          };
-      }
-    },
-    {
-      isLoading: true,
-      isSignout: false,
-      userToken: null,
-    }
-  );
-
-  React.useEffect(() => {
-    // Fetch the token from storage then navigate to our appropriate place
-    const bootstrapAsync = async () => {
-      let userToken;
-
-      try {
-        userToken = await AsyncStorage.getItem('userToken');
-      } catch (e) {
-        // Restoring token failed
-      }
-
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
-    };
-
-    bootstrapAsync();
-  }, []);
-
-  const authContext = React.useMemo(
-    () => ({
-      signIn: async (data: any) => {
-        // In a production app, we need to send some data (usually username, password) to server and get a token
-        // We will also need to handle errors if sign in failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
-      },
-      signUp: async (data: any) => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `AsyncStorage`
-        // In the example, we'll use a dummy token
-
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
-      },
-      signOut: () => dispatch({ type: 'SIGN_OUT' })
-    }),
-    []
-  );
-
-  if (state.isLoading) {
-    return <View>
-      <Text>
-        insert splash here
-      </Text>
-    </View>;
+  //for loading fonts
+  const [dataLoaded, setDataLoaded] = useState(false);
+  if (!dataLoaded) {
+    return <AppLoading
+      startAsync={fetchFonts}
+      onFinish={() => setDataLoaded(true)}
+      onError={(err: any) => console.log(err)
+      } />;
   }
 
   return (
-    <AuthContext.Provider value={authContext}>
-      < NavigationContainer >
-        {state.userToken ?
-          <Tabs.Navigator >
-            {/* <Tabs.Screen name="home" component={Home} />
-            <Tabs.Screen name="other" component={Other} /> */}
-          </Tabs.Navigator >
-
-          :
-
-          < AuthStack.Navigator
-            screenOptions={{
-              headerShown: false
-            }}>
-            <AuthStack.Screen
-              name="SignIn"
-              component={SignIn}
-            />
-            <AuthStack.Screen
-              name="SignUp"
-              component={SignUp}
-            />
-          </AuthStack.Navigator >
-        }
-      </NavigationContainer >
-    </AuthContext.Provider>
+    <RootNav />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
