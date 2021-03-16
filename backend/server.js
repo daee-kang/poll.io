@@ -22,13 +22,16 @@ require('./auth/auth');
 //-------EXPRESS STUFF
 const app = express();
 app.use(cors());
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //-------REQUIRE ROUTES
 const authenticateRoute = require('./routes/authenticate');
+const pollRoute = require('./routes/poll');
 
 //-------LOADIN ROUTES
 app.use('/', authenticateRoute);
+app.use('/poll', passport.authenticate('jwt', { session: false, failureFlash: true }), pollRoute);
 
 // Handle errors.
 app.use(function (err, req, res, next) {
