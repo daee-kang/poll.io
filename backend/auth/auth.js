@@ -16,18 +16,18 @@ passport.use(
                 email: token.user.email
             }, (err, user) => {
                 if (err) {
-                    return done(err, false)
+                    return done(err, false);
                 }
                 if (user) {
                     return done(null, {
                         name: user.name,
                         username: user.username,
                         _id: user._id
-                    })
+                    });
                 } else {
-                    return done(null, false)
+                    return done(null, false);
                 }
-            })
+            });
         }
     )
 );
@@ -41,9 +41,9 @@ passport.use(
         },
         async (username, password, done) => {
             try {
-                return done(null, { username, password })
+                return done(null, { username, password });
             } catch (error) {
-                console.log(error)
+                console.log(error);
                 done(error);
             }
         }

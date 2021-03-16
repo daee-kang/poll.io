@@ -2,9 +2,9 @@ const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const UserModel = require('../model/User');
-require('dotenv').config()
+require('dotenv').config();
 
-const router = express.Router()
+const router = express.Router();
 
 router.post(
     '/signup',
@@ -15,12 +15,12 @@ router.post(
             username: req.body.username,
             password: req.body.password
         }).then((data) => {
-            console.log(`user ${req.body.username} created`)
-            res.json(data)
+            console.log(`user ${req.body.username} created`);
+            res.json(data);
         }).catch(err => {
-            console.log(`SIGNUP ERR: ${err}`)
-            res.json(err)
-        })
+            console.log(`SIGNUP ERR: ${err}`);
+            res.json(err);
+        });
     }
 );
 
@@ -34,7 +34,7 @@ router.post(
                     if (err || !user) {
                         const error = new Error('An error occurred.');
 
-                        console.log(`LOGIN ERR: ${error}`)
+                        console.log(`LOGIN ERR: ${error}`);
                         return next(error);
                     }
 
@@ -51,7 +51,7 @@ router.post(
                         }
                     );
                 } catch (error) {
-                    console.log(`LOGIN ERR: ${error}`)
+                    console.log(`LOGIN ERR: ${error}`);
                     return next(error);
                 }
             }

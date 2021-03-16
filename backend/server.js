@@ -1,9 +1,9 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const passport = require('passport')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-require('dotenv').config()
+const express = require('express');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+require('dotenv').config();
 
 //-------MONGODB STUFF
 mongoose.connect(process.env.DB, {
@@ -17,15 +17,15 @@ mongoose.set('useFindAndModify', false);
 mongoose.connection.on('error', error => console.log(error));
 mongoose.Promise = global.Promise;
 
-require('./auth/auth')
+require('./auth/auth');
 
 //-------EXPRESS STUFF
-const app = express()
-app.use(cors())
-app.use(bodyParser.urlencoded({ extended: false }))
+const app = express();
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 //-------REQUIRE ROUTES
-const authenticateRoute = require('./routes/authenticate')
+const authenticateRoute = require('./routes/authenticate');
 
 //-------LOADIN ROUTES
 app.use('/', authenticateRoute);
@@ -37,5 +37,5 @@ app.use(function (err, req, res, next) {
 });
 
 app.listen(8000, () => {
-    console.log('Server started.')
+    console.log(`Server started on port 8000`);
 });
