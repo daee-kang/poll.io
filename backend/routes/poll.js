@@ -4,6 +4,21 @@ const UserModel = require('../model/User');
 
 const router = express.Router();
 
+router.get(
+    '/get',
+    async (req, res, next) => {
+        if (req.query.pollid === undefined) return res.json("no pollid");
+
+        PollModel.findById(req.query.pollid, (err, data) => {
+            console.log(err);
+            console.log(data);
+            if (err) return res.json(err);
+
+            return res.json(data);
+        });
+    }
+);
+
 router.post(
     '/create',
     async (req, res, next) => {
