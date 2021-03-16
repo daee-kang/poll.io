@@ -38,4 +38,20 @@ router.post(
     }
 );
 
+router.put(
+    '/vote',
+    async (req, res, next) => {
+        if (req.body.pollid === undefined || req.body.answerid === undefined) return res.json("missing data");
+
+        PollModel.findOneAndUpdate(
+            { "_id": req.body.pollid, "answers._id": req.body.answerid },
+            { $inc: { "answers.$.count": 1 } },
+            { new: true })
+            .then(poll => {
+                res.send(poll);
+            })
+            .catch(err => console.log(err));
+    }
+);
+
 module.exports = router;
