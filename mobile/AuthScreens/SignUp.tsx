@@ -36,33 +36,8 @@ const SignUp = ({ navigation }: Props) => {
                 autoCorrect={false}
             />
 
-            <View style={{ height: 20 }} />
-
-            <View style={{ flexDirection: 'row' }}>
-                <View style={{ flex: 1 }}>
-                    <Text>age</Text>
-                    <TextInput
-                        style={styles.textInput}
-                        value={age}
-                        onChangeText={(text) => setAge(text)}
-                        autoCorrect={false}
-                    />
-                </View>
-                <View style={{ flex: 1 }}>
-                    <Text>gender</Text>
-                    <TextInput
-                        style={styles.textInput}
-                        value={gender}
-                        onChangeText={(text) => setGender(text)}
-                        autoCorrect={false}
-                    />
-                </View>
-            </View>
-
-            <View style={{ height: 20 }} />
-
             <TouchableOpacity>
-                <Text>submit</Text>
+                <Text>create account</Text>
             </TouchableOpacity>
 
             <View style={{ flex: 1 }} />
