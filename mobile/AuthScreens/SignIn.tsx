@@ -70,7 +70,7 @@ const SignIn = ({ navigation }: Props) => {
 
             <View>
                 <View style={{ flex: 1 }} />
-                <TouchableOpacity onPress={() => signIn()}>
+                <TouchableOpacity>
                     <View style={styles.loginButton}>
                         <Text style={styles.loginText}>login</Text>
                     </View>

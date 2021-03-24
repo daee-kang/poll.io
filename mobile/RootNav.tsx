@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SignIn from './AuthScreens/SignIn';
 import SignUp from './AuthScreens/SignUp';
+import { api, stringify, header } from './utils/api';
 
 import { AuthContext } from './context';
 
@@ -86,8 +87,16 @@ export default function RootNav() {
                 // We will also need to handle errors if sign up failed
                 // After getting token, we need to persist the token using `AsyncStorage`
                 // In the example, we'll use a dummy token
-
-                dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+                console.log(data);
+                api.post('/signup', stringify(data), header)
+                    .then(response => {
+                        if (response.status === 200) {
+                            //success
+                            console.log(response);
+                            dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+                        }
+                    })
+                    .catch(err => console.log(err));
             },
             signOut: () => dispatch({ type: 'SIGN_OUT' })
         }),

@@ -1,17 +1,34 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native';
 import { AuthStackParamList } from '../App';
 import { Ionicons } from '@expo/vector-icons';
+
+import { AuthContext } from '../context';
 
 interface Props {
     navigation: StackNavigationProp<AuthStackParamList, 'SignUp'>;
 }
 
 const SignUp = ({ navigation }: Props) => {
+    const { signUp } = useContext(AuthContext);
+
     const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
+
+    const validateAndSignup = () => {
+        //TO-DO: validate some shit
+
+
+        const data = {
+            username,
+            email,
+            password
+        };
+        signUp(data);
+    };
 
     return (
         <View style={styles.page}>
@@ -22,11 +39,8 @@ const SignUp = ({ navigation }: Props) => {
             </TouchableOpacity>
             <Text style={styles.title}>sign up:</Text>
 
-            <View style={{ height: 30 }} />
+            <View style={{ height: 15 }} />
 
-            <Text style={styles.inputHeader}>
-                username
-                </Text>
             <TextInput
                 style={styles.textInput}
                 value={username}
@@ -35,10 +49,17 @@ const SignUp = ({ navigation }: Props) => {
                 placeholder="username"
             />
 
+            <TextInput
+                style={styles.textInput}
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+                autoCorrect={false}
+                placeholder="email address"
+                autoCompleteType="email"
+            />
 
-            <Text style={styles.inputHeader}>
-                password
-                </Text>
+            <View style={{ height: 15 }} />
+
             <TextInput
                 style={styles.textInput}
                 value={password}
@@ -63,7 +84,7 @@ const SignUp = ({ navigation }: Props) => {
             />
 
             <View style={{ marginTop: 50 }}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={validateAndSignup}>
                     <View style={styles.signupButton}>
                         <Text style={styles.signupText}>sign up</Text>
                     </View>
