@@ -26,7 +26,7 @@ const SignIn = ({ navigation }: Props) => {
             </Text>
                 <Text style={styles.title}>
                     login.
-            </Text>
+                </Text>
 
                 <View style={{ marginTop: 10, marginBottom: 30, flexDirection: 'row' }}>
                     <Text style={styles.subtitle}>
@@ -39,7 +39,7 @@ const SignIn = ({ navigation }: Props) => {
 
                 <Text style={styles.inputHeader}>
                     username
-            </Text>
+                </Text>
                 <View style={styles.centerRow}>
                     <TextInput
                         style={styles.loginInputs}
@@ -53,7 +53,7 @@ const SignIn = ({ navigation }: Props) => {
 
                 <Text style={styles.inputHeader}>
                     password
-            </Text>
+                </Text>
                 <View style={styles.centerRow}>
                     <TextInput
                         style={styles.loginInputs}
@@ -63,6 +63,7 @@ const SignIn = ({ navigation }: Props) => {
                         autoCapitalize="none"
                         autoCompleteType="password"
                         secureTextEntry={true}
+                        textContentType={'oneTimeCode'}
                     />
                 </View>
             </View>
@@ -76,6 +77,7 @@ const SignIn = ({ navigation }: Props) => {
                 </TouchableOpacity>
             </View>
 
+            <View style={{ flex: 1 }} />
         </View >
     );
 };
