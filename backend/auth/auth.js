@@ -13,7 +13,7 @@ passport.use(
         },
         async (token, done) => {
             UserModel.findOne({
-                email: token.user.email
+                email: token.user.email.toLowerCase()
             }, (err, user) => {
                 if (err) {
                     return done(err, false);

@@ -11,15 +11,26 @@ router.post(
     passport.authenticate('signup', { session: false }),
     async (req, res, next) => {
         UserModel.create({
-            email: req.body.email,
+            email: req.body.email.toLowerCase(),
             username: req.body.username,
             password: req.body.password
         }).then((data) => {
             console.log(`user ${req.body.username} created`);
-            res.json(data);
+            res.send({ success: true });
         }).catch(err => {
-            console.log(`SIGNUP ERR: ${err}`);
-            res.json(err);
+            if (err.name === 'MongoError' && err.code == 11000) {
+                //we have a duplicate
+                if (err.keyPattern.username === 1) {
+                    console.log("dup username");
+                    return res.status(422).send({ success: false, message: "Username already exists." });
+                } else if (err.keyPattern.email === 1) {
+                    console.log("dup email");
+                    return res.status(422).send({ success: false, message: "Email address already in use." });
+                } else {
+                    console.log("huh");
+                    return res.status(422).send({ success: false, errmsg });
+                }
+            }
         });
     }
 );

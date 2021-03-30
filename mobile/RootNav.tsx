@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SignIn from './AuthScreens/SignIn';
 import SignUp from './AuthScreens/SignUp';
+import Home from './Screens/Home';
 import { api, stringify, header } from './utils/api';
 
 import { AuthContext } from './context';
@@ -75,30 +76,33 @@ export default function RootNav() {
     const authContext = React.useMemo(
         () => ({
             signIn: async (data: any) => {
-                // In a production app, we need to send some data (usually username, password) to server and get a token
-                // We will also need to handle errors if sign in failed
-                // After getting token, we need to persist the token using `AsyncStorage`
-                // In the example, we'll use a dummy token
-
-                dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
-            },
-            signUp: async (data: any) => {
-                // In a production app, we need to send user data to server and get a token
-                // We will also need to handle errors if sign up failed
-                // After getting token, we need to persist the token using `AsyncStorage`
-                // In the example, we'll use a dummy token
-                console.log(data);
-                api.post('/signup', stringify(data), header)
+                api.post('/login', stringify(data), header)
                     .then(response => {
-                        if (response.status === 200) {
-                            //success
-                            console.log(response);
-                            dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
-                        }
-                    })
-                    .catch(err => console.log(err));
+                        dispatch({ type: 'SIGN_IN', token: response.data.token });
+                    });
             },
-            signOut: () => dispatch({ type: 'SIGN_OUT' })
+
+            signUp: async (data: any, callback: (err: string) => void) => {
+                console.log(data);
+                try {
+                    let response = await api.post('/signup', stringify(data), header);
+                    if (response.status === 200) {
+                        //success
+                        response = await api.post('/login', stringify(data), header);
+                        dispatch({ type: 'SIGN_IN', token: response.data.token });
+                        return;
+                    }
+                } catch (e) {
+                    console.log(e.response.data.message);
+                    callback(e.response.data.message);
+                }
+            },
+
+            signOut: () => dispatch({ type: 'SIGN_OUT' }),
+
+            getToken: async () => {
+                return await AsyncStorage.getItem('userToken');
+            },
         }),
         []
     );
@@ -116,8 +120,7 @@ export default function RootNav() {
             < NavigationContainer >
                 {state.userToken ?
                     <Tabs.Navigator >
-                        {/* <Tabs.Screen name="home" component={Home} />
-            <Tabs.Screen name="other" component={Other} /> */}
+                        <Tabs.Screen name="home" component={Home} />
                     </Tabs.Navigator >
 
                     :

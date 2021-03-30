@@ -18,16 +18,87 @@ const SignUp = ({ navigation }: Props) => {
     const [password, setPassword] = useState("");
     const [password2, setPassword2] = useState("");
 
-    const validateAndSignup = () => {
-        //TO-DO: validate some shit
+    const [error, dispatch] = React.useReducer(
+        (prevState: any, action: any) => {
+            switch (action.type) {
+                case 'ERROR':
+                    return {
+                        ...prevState,
+                        errorMessage: action.message,
+                        isError: true
+                    };
+                case 'CLEAR':
+                    return {
+                        ...prevState,
+                        errorMessage: '',
+                        isError: false
+                    };
+            }
+        },
+        {
+            isError: false,
+            errorMessage: ''
+        }
+    );
 
+    const validate = () => {
+        let message = "";
+        if (username === "") {
+            message = "Username cannot be blank";
+        } else if (email === "") {
+            message = "Email cannot be blank";
+        } else if (password === "") {
+            message = "Password cannot be blank";
+        } else if (password2 === "") {
+            message = "Confirm password";
+        } else if (!validateEmail()) {
+            message = "Invalid email";
+        } else if (!validatePassword()) {
+            message = "Password should contain at least one digit, one upper case, and must be 8 characters long";
+        } else if (password !== password2) {
+            message = "Confirmed password doesn't match";
+        }
+        if (message === "") return true;
+
+        dispatch({ type: 'ERROR', message });
+        return false;
+    };
+
+    const validateEmail = () => {
+        if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))
+            return true;
+        return false;
+    };
+
+    const validatePassword = () => {
+        if (/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password))
+            return true;
+        return false;
+    };
+
+    const validateAndSignup = () => {
+        dispatch({ type: 'CLEAR' });
+        validate();
 
         const data = {
             username,
             email,
             password
         };
-        signUp(data);
+
+        if (!validate()) return;
+
+        //err will only be set if there is an error. Otherwise, rootnav will
+        //transition into logged in state and forget about this here.
+        signUp(data, validateCallback);
+    };
+
+    const validateCallback = (err: string) => {
+        if (err === undefined) {
+            dispatch({ type: 'ERROR', message: "Unknown error" });
+        } else {
+            dispatch({ type: 'ERROR', message: err });
+        }
     };
 
     return (
@@ -82,6 +153,8 @@ const SignUp = ({ navigation }: Props) => {
                 placeholder="confirm password"
                 textContentType={'oneTimeCode'}
             />
+
+            <Text style={styles.error}>{error.errorMessage}</Text>
 
             <View style={{ marginTop: 50 }}>
                 <TouchableOpacity onPress={validateAndSignup}>
@@ -140,6 +213,12 @@ const styles = StyleSheet.create({
         fontFamily: 'roboto-slab-bold',
         fontSize: 20,
         textAlign: 'center'
+    },
+    error: {
+        textAlign: 'center',
+        fontFamily: 'roboto-slab',
+        color: '#d62828'
+
     }
 });
 
