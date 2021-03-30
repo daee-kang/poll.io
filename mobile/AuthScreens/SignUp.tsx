@@ -78,15 +78,14 @@ const SignUp = ({ navigation }: Props) => {
 
     const validateAndSignup = () => {
         dispatch({ type: 'CLEAR' });
-        validate();
+
+        if (!validate()) return;
 
         const data = {
             username,
             email,
             password
         };
-
-        if (!validate()) return;
 
         //err will only be set if there is an error. Otherwise, rootnav will
         //transition into logged in state and forget about this here.

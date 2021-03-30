@@ -15,8 +15,55 @@ const SignIn = ({ navigation }: Props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    const [usernameFocused, setUsernameFocused] = useState(false);
-    const [passwordFocused, setPasswordFocused] = useState(false);
+    const [error, dispatch] = React.useReducer(
+        (prevState: any, action: any) => {
+            switch (action.type) {
+                case 'ERROR':
+                    return {
+                        ...prevState,
+                        errorMessage: action.message,
+                        isError: true
+                    };
+                case 'CLEAR':
+                    return {
+                        ...prevState,
+                        errorMessage: '',
+                        isError: false
+                    };
+            }
+        },
+        {
+            isError: false,
+            errorMessage: ''
+        }
+    );
+
+    const submitSignin = () => {
+        dispatch({ type: 'CLEAR' });
+
+        if (username === "") {
+            dispatch({ type: 'ERROR', message: "Username field empty" });
+            return;
+        } else if (password === "") {
+            dispatch({ type: 'ERROR', message: "Password field empty" });
+            return;
+        }
+
+        const data = {
+            username,
+            password
+        };
+
+        signIn(data, signinCallback);
+    };
+
+    const signinCallback = (err: string) => {
+        if (err === undefined) {
+            dispatch({ type: 'ERROR', message: "Unknown error" });
+        } else {
+            dispatch({ type: 'ERROR', message: err });
+        }
+    };
 
     return (
         <View style={styles.page}>
@@ -68,9 +115,11 @@ const SignIn = ({ navigation }: Props) => {
                 </View>
             </View>
 
+            <Text style={styles.error}>{error.errorMessage}</Text>
+
             <View>
                 <View style={{ flex: 1 }} />
-                <TouchableOpacity>
+                <TouchableOpacity onPress={submitSignin}>
                     <View style={styles.loginButton}>
                         <Text style={styles.loginText}>login</Text>
                     </View>
@@ -135,6 +184,11 @@ const styles = StyleSheet.create({
         fontFamily: 'roboto-slab-bold',
         fontSize: 20,
         textAlign: 'center'
+    },
+    error: {
+        textAlign: 'center',
+        fontFamily: 'roboto-slab',
+        color: '#d62828'
     }
 });
 

@@ -75,10 +75,14 @@ export default function RootNav() {
 
     const authContext = React.useMemo(
         () => ({
-            signIn: async (data: any) => {
+            signIn: async (data: any, callback: (err: string) => void) => {
                 api.post('/login', stringify(data), header)
                     .then(response => {
                         dispatch({ type: 'SIGN_IN', token: response.data.token });
+                    })
+                    .catch((e) => {
+                        console.log(e.response.data.message);
+                        callback(e.response.data.message);
                     });
             },
 
