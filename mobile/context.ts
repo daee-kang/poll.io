@@ -5,5 +5,4 @@ export const AuthContext = createContext({
     signIn: (data: any, callback: (err: string) => void) => { },
     signUp: (data: any, callback: (err: string) => void) => { },
     signOut: () => { },
-    getToken: () => String
 });

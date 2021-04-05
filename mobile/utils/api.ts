@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'querystring';
 
 const api = axios.create({
-    baseURL: "http://localhost:8000/",
+    baseURL: "http://daee-mb.local:8000/",
     responseType: "json"
 });
 

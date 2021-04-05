@@ -102,11 +102,7 @@ export default function RootNav() {
                 }
             },
 
-            signOut: () => dispatch({ type: 'SIGN_OUT' }),
-
-            getToken: async () => {
-                return await AsyncStorage.getItem('userToken');
-            },
+            signOut: () => dispatch({ type: 'SIGN_OUT' })
         }),
         []
     );

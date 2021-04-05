@@ -8,14 +8,10 @@ interface Props {
 }
 
 const Home = (props: Props) => {
-    const { signOut, getToken } = useContext(AuthContext);
+    const { signOut } = useContext(AuthContext);
 
-    //temp for now probably will delete
     useEffect(() => {
-        let getTok = async () => {
-            const token = await getToken();
-            console.log(token);
-        };
+
     }, []);
 
     return (
