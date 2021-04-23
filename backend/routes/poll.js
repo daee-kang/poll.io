@@ -28,7 +28,7 @@ router.post(
         let parsedAnswers = [];
         for (let i = 0; i < req.body.answers.length; i++) {
             parsedAnswers.push({
-                answer: req.body.answers[i],
+                answer: req.body.answers[i].text,
                 count: 0
             });
         }
@@ -47,6 +47,7 @@ router.post(
 
                 result.polls.push(created._id);
                 result.save();
+                console.log('poll created');
                 return res.json("poll created noob");
             })
             .catch(err => { console.log(err); });

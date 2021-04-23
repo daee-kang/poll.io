@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SignIn from './AuthScreens/SignIn';
@@ -10,9 +9,9 @@ import Home from './Screens/Home';
 import { api, stringify, header } from './utils/api';
 
 import { AuthContext } from './context';
+import TabNavigation from './Navigation/TabNavigation';
 
 const AuthStack = createStackNavigator();
-const Tabs = createBottomTabNavigator();
 
 //navigator type exports
 export type AuthStackParamList = {
@@ -26,12 +25,14 @@ export default function RootNav() {
         (prevState: any, action: any) => {
             switch (action.type) {
                 case 'RESTORE_TOKEN':
+                    AsyncStorage.setItem('userToken', action.token);
                     return {
                         ...prevState,
                         userToken: action.token,
                         isLoading: false,
                     };
                 case 'SIGN_IN':
+                    AsyncStorage.setItem('userToken', action.token);
                     return {
                         ...prevState,
                         isSignout: false,
@@ -111,7 +112,7 @@ export default function RootNav() {
         return <View>
             <Text>
                 insert splash here
-      </Text>
+            </Text>
         </View>;
     }
 
@@ -119,9 +120,8 @@ export default function RootNav() {
         <AuthContext.Provider value={authContext}>
             < NavigationContainer >
                 {state.userToken ?
-                    <Tabs.Navigator >
-                        <Tabs.Screen name="home" component={Home} />
-                    </Tabs.Navigator >
+
+                    < TabNavigation />
 
                     :
 
