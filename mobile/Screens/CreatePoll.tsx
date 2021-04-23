@@ -1,11 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { stringify } from 'querystring';
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, FlatList } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import cstyles from '../Components/StyleGuide';
 import { COLORS } from '../Constants';
-import { api } from '../utils/api';
+import { api, apiPost } from '../utils/api';
 
 interface Props {
 
@@ -34,19 +33,7 @@ const CreatePoll = (props: Props) => {
     };
 
     const createPoll = async () => {
-        const userToken = await AsyncStorage.getItem('userToken');
-
-        api.post('/poll/create', {
-            question,
-            answers
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `bearer ${userToken}`
-            }
-        }).then((res) => {
-            console.log(res);
-        });
+        await apiPost('/poll/create', { question, answers });
     };
 
     return (

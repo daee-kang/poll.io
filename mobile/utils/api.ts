@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import qs from 'querystring';
 
@@ -15,4 +16,19 @@ const header = {
         'Content-Type': 'application/x-www-form-urlencoded'
     }
 };
-export { api, stringify, header };
+
+const apiPost = async (path: string, body: any) => {
+    const userToken = await AsyncStorage.getItem('userToken');
+
+    return api.post(
+        path,
+        body,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `bearer ${userToken}`
+            }
+        });
+};
+
+export { api, apiPost, stringify, header };
