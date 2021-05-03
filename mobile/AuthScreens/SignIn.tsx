@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { AuthStackParamList } from '../App';
 
-import { AuthContext } from '../context';
+import { AuthContext } from '../Context/authContext';
 
 interface Props {
     navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>;

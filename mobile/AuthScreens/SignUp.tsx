@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'rea
 import { AuthStackParamList } from '../App';
 import { Ionicons } from '@expo/vector-icons';
 
-import { AuthContext } from '../context';
+import { AuthContext } from '../Context/authContext';
 
 interface Props {
     navigation: StackNavigationProp<AuthStackParamList, 'SignUp'>;

@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
 
-import { AuthContext } from './context';
 import RootNav from './RootNav';
 
 //navigator type exports
