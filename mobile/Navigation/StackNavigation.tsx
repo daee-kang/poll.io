@@ -1,14 +1,19 @@
 import React from 'react';
-import { CardStyleInterpolators, createStackNavigator, StackNavigationProp } from '@react-navigation/stack';
+import { CardStyleInterpolators, createStackNavigator } from '@react-navigation/stack';
 import Home from '../Screens/Home';
 import CreatePoll from '../Screens/CreatePoll';
 import Map from '../Screens/Map';
+import { Region } from 'react-native-maps';
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+    home: undefined,
+    map: {
+        region: Region | undefined,
+        updateRegion: (inRegion: Region) => void;
+    },
+};
 
-export interface StackProps {
-    navigation: StackNavigationProp<any, any>;
-}
+const Stack = createStackNavigator<RootStackParamList>();
 
 const MyStack = () => {
     return (

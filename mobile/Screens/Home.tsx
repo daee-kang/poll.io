@@ -1,18 +1,31 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, SafeAreaView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text } from 'react-native';
 import { Region } from 'react-native-maps';
 import Header from '../Components/Header';
 import { AuthContext } from '../Context/authContext';
-import { StackProps } from '../Navigation/StackNavigation';
 import * as Location from 'expo-location';
+import { useNavigation } from '@react-navigation/core';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../Navigation/StackNavigation';
 
-interface Props extends StackProps {
+export type HomeScreenNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    'home'
+>;
+
+interface Props {
 
 }
 
 const Home = (props: Props) => {
     //const { signOut } = useContext(AuthContext);
+    const navigation = useNavigation<HomeScreenNavigationProp>();
+
     const [region, setRegion] = useState<Region | undefined>();
+
+    const updateRegion = (inRegion: Region) => {
+        setRegion(inRegion);
+    };
 
     useEffect(() => {
         //on initial load, just set location to current location
@@ -31,16 +44,18 @@ const Home = (props: Props) => {
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
             });
-            console.log(location.coords);
         })();
     }, []);
 
     return (
         <View>
-            <Header navigation={props.navigation} />
+            <Header navigation={navigation} region={region} updateRegion={updateRegion} />
 
             <Text>
-                {region?.latitude ?? 0}
+                latitude: {region?.latitude ?? 0}
+            </Text>
+            <Text>
+                longitude: {region?.longitude ?? 0}
             </Text>
         </ View>
     );

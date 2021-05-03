@@ -1,40 +1,61 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import MapView, { Region, Marker, Circle } from 'react-native-maps';
-import * as Location from 'expo-location';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import MapView, { Region, Circle } from 'react-native-maps';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/core';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../Navigation/StackNavigation';
 
+export type MapScreenNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    'map'
+>;
+
+export type MapProps = {
+    region: Region | undefined,
+    updateRegion: (inRegion: Region) => void;
+};
 
 interface Props {
 
 }
 
+const defaultRegion: Region = {
+    //TO-DO: change this to someething fun hehe
+    latitude: 0,
+    longitude: 0,
+    latitudeDelta: 0.0922,
+    longitudeDelta: 0.0421
+};
+
+
 const Map = (props: Props) => {
-    const [region, setRegion] = useState<Region | undefined>();
     const [radius, setRadius] = useState(4000);
+    //const route = useRoute<RouteProp<MapProps, 'map'>>();
+
+    const navigation = useNavigation<MapScreenNavigationProp>();
+    const route = useRoute<RouteProp<RootStackParamList, 'map'>>();
+
+    const [region, setRegion] = useState<Region | undefined>();
 
     useEffect(() => {
-        (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                //TO-DO: add error messaging for this
-                console.log("no access granted");
-                return;
-            }
-
-            let location = await Location.getCurrentPositionAsync({});
-            setRegion({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
-            });
-            console.log(location.coords);
-        })();
+        setRegion(route.params.region ?? defaultRegion);
     }, []);
+
+    console.log(region);
+
+    const goBack = () => {
+        route.params.updateRegion(region ?? defaultRegion);
+        navigation.goBack();
+    };
 
     return (
         <View>
+            <TouchableOpacity onPress={goBack}>
+                <Text style={{ backgroundColor: 'green', padding: 20 }}>
+                    go back
+                </Text>
+            </TouchableOpacity>
+
             <MapView
                 style={styles.map}
                 initialRegion={region}
