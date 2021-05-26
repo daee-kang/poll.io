@@ -1,16 +1,28 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/core';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TextInput, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, FlatList } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import cstyles from '../Components/StyleGuide';
 import { COLORS } from '../Constants';
+import { RootStackParamList } from '../Navigation/StackNavigation';
 import { api, apiPost } from '../utils/api';
+import { defaultRegion } from '../Screens/Map';
+import { Region } from 'react-native-maps';
+
+export type CreatePollScreenNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    'map'
+>;
 
 interface Props {
 
 }
 
 const CreatePoll = (props: Props) => {
+    const navigation = useNavigation<CreatePollScreenNavigationProp>();
+    const route = useRoute<RouteProp<RootStackParamList, 'map'>>();
+
     const [question, setQuestion] = useState("");
     const [questionHeight, setQuestionHeight] = useState(35);
     //poll questions
@@ -18,6 +30,8 @@ const CreatePoll = (props: Props) => {
         { text: "" },
         { text: "" }
     ]);
+
+    const region = route.params.region ?? defaultRegion;
 
     const addAnswer = () => {
         let a = answers;
@@ -33,7 +47,16 @@ const CreatePoll = (props: Props) => {
     };
 
     const createPoll = async () => {
-        await apiPost('/poll/create', { question, answers });
+        //longitude comes first before latitude according to docs
+        const location = {
+            type: "Point",
+            coordinates: [
+                region.longitude,
+                region.latitude
+            ]
+        };
+        await apiPost('/poll/create', { question, answers, location });
+        navigation.goBack();
     };
 
     return (
@@ -99,6 +122,10 @@ const CreatePoll = (props: Props) => {
 
                         <Text>
                             poll options:
+                        </Text>
+
+                        <Text>
+                            debug: Location -> {region.latitude} : {region.longitude}
                         </Text>
 
                         <TouchableOpacity onPress={createPoll}>

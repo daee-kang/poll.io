@@ -19,8 +19,21 @@ const PollSchema = new Schema({
             }
         }
     ],
-    zipcode: String
+    location: {
+        type: {
+            type: String,
+            enum: ["Point"],
+            default: "Point",
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    }
 });
+
+PollSchema.index({ location: '2dsphere' });
 
 const PollModel = mongoose.model('poll', PollSchema);
 

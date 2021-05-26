@@ -19,7 +19,7 @@ interface Props {
 
 }
 
-const defaultRegion: Region = {
+export const defaultRegion: Region = {
     //TO-DO: change this to someething fun hehe
     latitude: 0,
     longitude: 0,
@@ -29,12 +29,10 @@ const defaultRegion: Region = {
 
 
 const Map = (props: Props) => {
-    const [radius, setRadius] = useState(4000);
-    //const route = useRoute<RouteProp<MapProps, 'map'>>();
-
     const navigation = useNavigation<MapScreenNavigationProp>();
     const route = useRoute<RouteProp<RootStackParamList, 'map'>>();
 
+    const [radius, setRadius] = useState(4000);
     const [region, setRegion] = useState<Region | undefined>();
 
     useEffect(() => {

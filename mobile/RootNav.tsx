@@ -79,6 +79,7 @@ export default function RootNav() {
             signIn: async (data: any, callback: (err: string) => void) => {
                 api.post('/login', stringify(data), header)
                     .then(response => {
+                        console.log(response);
                         dispatch({ type: 'SIGN_IN', token: response.data.token });
                     })
                     .catch((e) => {

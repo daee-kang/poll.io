@@ -10,6 +10,7 @@ router.post(
     '/signup',
     passport.authenticate('signup', { session: false }),
     async (req, res, next) => {
+        console.log(req.body);
         UserModel.create({
             email: req.body.email.toLowerCase(),
             username: req.body.username,

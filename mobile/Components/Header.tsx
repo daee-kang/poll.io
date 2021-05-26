@@ -36,7 +36,9 @@ const Header = (props: Props) => {
 
             <View style={styles.right}>
                 <TouchableOpacity style={styles.button}
-                    onPress={() => navigation.navigate('map')}
+                    onPress={() => navigation.navigate('create', {
+                        region: props.region
+                    })}
                 >
                     <View style={styles.buttonContainer}>
                         <Ionicons name="person" size={25} color={COLORS.SECONDARY} />

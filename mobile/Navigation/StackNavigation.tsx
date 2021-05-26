@@ -11,6 +11,9 @@ export type RootStackParamList = {
         region: Region | undefined,
         updateRegion: (inRegion: Region) => void;
     },
+    create: {
+        region: Region | undefined,
+    };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -25,6 +28,7 @@ const MyStack = () => {
         >
             <Stack.Screen name="home" component={Home} />
             <Stack.Screen name="map" component={Map} />
+            <Stack.Screen name="create" component={CreatePoll} />
         </Stack.Navigator>
     );
 };

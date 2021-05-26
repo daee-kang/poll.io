@@ -31,4 +31,25 @@ const apiPost = async (path: string, body: any) => {
         });
 };
 
-export { api, apiPost, stringify, header };
+const apiGet = async (path: string, params: any) => {
+    const userToken = await AsyncStorage.getItem('userToken');
+
+    return api.get(
+        path,
+        {
+            params,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `bearer ${userToken}`
+            }
+        }
+    );
+};
+
+export {
+    api,
+    apiPost,
+    apiGet,
+    stringify,
+    header
+};

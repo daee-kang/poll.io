@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Region } from 'react-native-maps';
 import Header from '../Components/Header';
 import { AuthContext } from '../Context/authContext';
@@ -7,6 +7,7 @@ import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../Navigation/StackNavigation';
+import { apiGet } from '../utils/api';
 
 export type HomeScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
@@ -18,7 +19,7 @@ interface Props {
 }
 
 const Home = (props: Props) => {
-    //const { signOut } = useContext(AuthContext);
+    const { signOut } = useContext(AuthContext);
     const navigation = useNavigation<HomeScreenNavigationProp>();
 
     const [region, setRegion] = useState<Region | undefined>();
@@ -47,16 +48,45 @@ const Home = (props: Props) => {
         })();
     }, []);
 
+    const getNearby = () => {
+        apiGet("/poll/get", {
+            latitude: region?.latitude ?? 0,
+            longitude: region?.longitude ?? 0,
+            range: 5000,
+        }).then((res: any) => {
+            console.log(res.data);
+        });
+    };
+
     return (
         <View>
             <Header navigation={navigation} region={region} updateRegion={updateRegion} />
 
+            {/* debug */}
             <Text>
                 latitude: {region?.latitude ?? 0}
             </Text>
             <Text>
                 longitude: {region?.longitude ?? 0}
             </Text>
+            {/* debug */}
+
+            <TouchableOpacity
+                onPress={signOut}
+            >
+                <Text>
+                    logout
+                </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={getNearby}
+            >
+                <Text style={{ backgroundColor: 'green' }}>
+                    fetch nearby
+                </Text>
+            </TouchableOpacity>
+
         </ View>
     );
 };
