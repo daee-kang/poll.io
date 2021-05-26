@@ -19,20 +19,7 @@ const UserSchema = new Schema({
         required: true
     },
     polls: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'poll' }],
-
 });
-
-//hash password
-UserSchema.pre(
-    'save',
-    async function (next) {
-        const user = this;
-        const hash = await bcrypt.hash(this.password, 10);
-
-        this.password = hash;
-        next();
-    }
-);
 
 //check if password is valid
 UserSchema.methods.isValidPassword = async function (password) {

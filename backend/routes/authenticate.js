@@ -3,6 +3,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const UserModel = require('../model/User');
 require('dotenv').config();
+const bcrypt = require('bcrypt');
 
 const router = express.Router();
 
@@ -11,10 +12,13 @@ router.post(
     passport.authenticate('signup', { session: false }),
     async (req, res, next) => {
         console.log(req.body);
+
+        const hashed = await bcrypt.hash(req.body.password, 10);
+
         UserModel.create({
             email: req.body.email.toLowerCase(),
             username: req.body.username,
-            password: req.body.password
+            password: hashed
         }).then((data) => {
             console.log(`user ${req.body.username} created`);
             res.send({ success: true });
