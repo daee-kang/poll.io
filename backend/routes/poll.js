@@ -16,8 +16,13 @@ router.get(
 
         PollModel.find({
             location: {
-                $nearSphere: [longitude, latitude],
-                $minDistance: range
+                $nearSphere: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [longitude, latitude]
+                    },
+                    $maxDistance: range
+                }
             }
         }, (err, data) => {
             if (err) console.log(err);
