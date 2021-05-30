@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../Navigation/StackNavigation';
 import { apiGet } from '../utils/api';
+import FeedFlatList from '../Components/FeedFlatList';
 
 export type HomeScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
@@ -48,44 +49,18 @@ const Home = (props: Props) => {
         })();
     }, []);
 
-    const getNearby = () => {
-        apiGet("/poll/get", {
-            latitude: region?.latitude ?? 0,
-            longitude: region?.longitude ?? 0,
-            range: 5000,
-        }).then((res: any) => {
-            console.log(res.data);
-        });
-    };
-
     return (
         <View>
             <Header navigation={navigation} region={region} updateRegion={updateRegion} />
 
-            {/* debug */}
-            <Text>
-                latitude: {region?.latitude ?? 0}
-            </Text>
-            <Text>
-                longitude: {region?.longitude ?? 0}
-            </Text>
-            {/* debug */}
-
-            <TouchableOpacity
-                onPress={signOut}
-            >
-                <Text>
-                    logout
-                </Text>
+            <TouchableOpacity onPress={signOut}>
+                <Text> logout </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-                onPress={getNearby}
-            >
-                <Text style={{ backgroundColor: 'green' }}>
-                    fetch nearby
-                </Text>
-            </TouchableOpacity>
+            <FeedFlatList
+                latitude={region?.latitude}
+                longitude={region?.longitude}
+            />
 
         </ View>
     );
