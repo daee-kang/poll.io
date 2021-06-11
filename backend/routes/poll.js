@@ -36,6 +36,23 @@ router.get(
     }
 );
 
+//todo later
+// router.get(
+//     '/getPoll',
+//     async (req, res, next) => {
+//         if (req.query.pollid === undefined) return res.json("no pollid");
+
+//         PollModel.findById(req.query.pollid,
+//             (err, res) => {
+//                 console.log(res);
+//                 res.json(res);
+//             },
+//             (err) => {
+//                 if (err) console.log(err);
+//             });
+//     }
+// );
+
 router.post(
     '/create',
     async (req, res, next) => {
@@ -72,7 +89,7 @@ router.post(
     }
 );
 
-router.put(
+router.post(
     '/vote',
     async (req, res, next) => {
         if (req.body.pollid === undefined || req.body.answerid === undefined) return res.json("missing data");

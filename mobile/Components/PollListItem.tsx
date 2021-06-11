@@ -1,5 +1,7 @@
+import { useNavigation } from '@react-navigation/core';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Poll, { PollScreenNavigationProp } from '../Screens/Poll';
 import { pollItem } from './FeedFlatList';
 
 interface Props {
@@ -7,8 +9,28 @@ interface Props {
 }
 
 const PollListItem = ({ pollItem }: Props) => {
+    const navigation = useNavigation<PollScreenNavigationProp>();
+
+    const goToPoll = () => {
+        const extractedAnswers = pollItem.answers.map(answer => {
+            return {
+                answer: answer.answer,
+                id: answer._id
+            };
+        });
+
+        navigation.navigate('poll', {
+            id: pollItem._id,
+            answers: extractedAnswers,
+            question: pollItem.question
+        });
+    };
+
     return (
-        <TouchableOpacity style={styles.container}>
+        <TouchableOpacity
+            style={styles.container}
+            onPress={goToPoll}
+        >
             <Text style={styles.questionText}>
                 {pollItem.question}
             </Text>

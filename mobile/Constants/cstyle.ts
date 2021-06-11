@@ -1,3 +1,5 @@
+import { StyleSheet } from "react-native";
+
 const COLORS = {
     PRIMARY: '#FFBC42',
     SECONDARY: '#0496FF',
@@ -7,7 +9,19 @@ const COLORS = {
 };
 
 const STYLES = {
-    BORDERRADIUS: 15
+    BORDERRADIUS: 15,
+    PAGEPADDING: 10,
 };
 
-export { COLORS, STYLES };
+const preStyles = StyleSheet.create({
+    bigTitle: {
+        fontFamily: 'roboto-slab-bold',
+        fontSize: 30,
+    },
+    title: {
+        fontFamily: 'roboto-slab',
+        fontSize: 22,
+    }
+});
+
+export { COLORS, STYLES, preStyles };

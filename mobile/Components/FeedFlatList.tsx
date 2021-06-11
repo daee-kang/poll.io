@@ -13,7 +13,7 @@ export type pollItem = {
     question: string,
     answers: [{
         _id: string,
-        title: string,
+        answer: string,
         count: number;
     }],
     longitude: number,
