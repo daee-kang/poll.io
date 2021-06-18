@@ -17,8 +17,7 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: true
-    },
-    polls: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'poll' }],
+    }
 });
 
 //check if password is valid

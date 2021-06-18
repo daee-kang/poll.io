@@ -7,18 +7,7 @@ const PollSchema = new Schema({
         type: String,
         required: true
     },
-    answers: [
-        {
-            answer: {
-                type: String,
-                required: true
-            },
-            count: {
-                type: Number,
-                default: 0
-            }
-        }
-    ],
+    answers: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'answer' }],
     location: {
         type: {
             type: String,

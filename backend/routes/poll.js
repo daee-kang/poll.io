@@ -1,9 +1,14 @@
 const express = require('express');
+const passport = require('passport');
+const AnswerModel = require('../model/Answer');
 const PollModel = require('../model/Poll');
 const UserModel = require('../model/User');
+const UserPollsModel = require('../model/UserPolls');
 
 const router = express.Router();
 
+//get all the polls within a given range(radius) from long,lat
+//answers array are not filled at this point to reduce latency :D
 router.get(
     '/get',
     async (req, res, next) => {
@@ -36,22 +41,22 @@ router.get(
     }
 );
 
-//todo later
-// router.get(
-//     '/getPoll',
-//     async (req, res, next) => {
-//         if (req.query.pollid === undefined) return res.json("no pollid");
+router.get(
+    '/getPoll',
+    async (req, res, next) => {
+        if (req.query.pollid === undefined) return res.json("no pollid");
+        console.log(req.query.pollid);
 
-//         PollModel.findById(req.query.pollid,
-//             (err, res) => {
-//                 console.log(res);
-//                 res.json(res);
-//             },
-//             (err) => {
-//                 if (err) console.log(err);
-//             });
-//     }
-// );
+        PollModel.findById(req.query.pollid)
+            .populate('answers')
+            .exec((err, poll) => {
+                if (err) console.log(err);
+
+                console.log(poll);
+                res.json(poll);
+            });
+    }
+);
 
 router.post(
     '/create',
@@ -60,32 +65,42 @@ router.post(
         if (req.body.answers === undefined || req.body.answers.length === 0) return res.json("err, no answers");
         if (req.body.location === undefined) return res.json("sorry no location provided");
 
-        let parsedAnswers = [];
-        for (let i = 0; i < req.body.answers.length; i++) {
-            parsedAnswers.push({
-                answer: req.body.answers[i].text,
-                count: 0
-            });
-        }
-
         //create poll
         let created = await PollModel.create({
             question: req.body.question,
-            answers: parsedAnswers,
+            answers: [],
             location: req.body.location
         });
 
-        //add poll to users polls
-        UserModel.findOne({ username: req.user.username })
-            .then((result, err) => {
-                if (err) return res.json(err);
+        //create answers
+        let answers = [];
+        for (let i = 0; i < req.body.answers.length; i++) {
+            let answer = await AnswerModel.create({
+                pollid: created._id,
+                voted: []
+            });
+            answers.push(answer._id);
+        }
 
-                result.polls.push(created._id);
-                result.save();
-                console.log('poll created', created);
-                return res.json("poll created noob");
-            })
-            .catch(err => { console.log(err); });
+        //add answers to newly created poll
+        created.answers = answers;
+        created.save();
+
+        //add the new poll id to userpolls
+        UserPollsModel.findOneAndUpdate(
+            { userid: req.user._id },
+            { $push: { polls: created._id } },
+            { upsert: true },
+            (err, result) => {
+                if (err) {
+                    console.log(err);
+                    res.json(err);
+                }
+
+                console.log(result);
+                res.json("poll created xD");
+            }
+        );
     }
 );
 
