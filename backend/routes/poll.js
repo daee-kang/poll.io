@@ -34,9 +34,6 @@ router.get(
             .exec((err, data) => {
                 if (err) console.log(err);
 
-                for (poll of data) {
-                    poll.populate('answers');
-                }
                 console.log(data);
                 res.json(data);
             });
