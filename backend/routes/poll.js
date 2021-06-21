@@ -107,11 +107,13 @@ router.post(
 router.post(
     '/vote',
     async (req, res, next) => {
+        console.log(req.body);
         if (req.body.pollid === undefined || req.body.answerid === undefined) return res.json("missing data");
+        const { pollid, answerid } = req.body;
 
-        PollModel.findOneAndUpdate(
-            { "_id": req.body.pollid, "answers._id": req.body.answerid },
-            { $inc: { "answers.$.count": 1 } },
+        AnswerModel.findOneAndUpdate(
+            { "_id": answerid },
+            { $push: { voted: req.user._id } },
             { new: true })
             .then(poll => {
                 res.send(poll);
