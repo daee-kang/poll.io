@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Poll, { PollScreenNavigationProp } from '../Screens/Poll';
-import { pollItem } from './FeedFlatList';
+import { answerItem, pollItem } from './FeedFlatList';
 
 interface Props {
     pollItem: pollItem;
@@ -12,18 +12,7 @@ const PollListItem = ({ pollItem }: Props) => {
     const navigation = useNavigation<PollScreenNavigationProp>();
 
     const goToPoll = () => {
-        const extractedAnswers = pollItem.answers.map(answer => {
-            return {
-                answer: answer.answer,
-                id: answer._id
-            };
-        });
-
-        navigation.navigate('poll', {
-            id: pollItem._id,
-            answers: extractedAnswers,
-            question: pollItem.question
-        });
+        navigation.navigate('poll', { poll: pollItem });
     };
 
     return (
@@ -39,8 +28,8 @@ const PollListItem = ({ pollItem }: Props) => {
                     VOTES
                 </Text>
                 <Text style={styles.subText}>
-                    {pollItem.answers.reduce((a, b) => {
-                        return a + b.count;
+                    {pollItem.answers.reduce((a: number, b: answerItem) => {
+                        return a + b.voted.length;
                     }, 0)}
                 </Text>
                 <Text style={styles.subTitle}>

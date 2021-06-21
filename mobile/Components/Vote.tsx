@@ -1,18 +1,17 @@
 import React from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { answerResult } from '../Screens/Poll';
 import { apiPost } from '../utils/api';
+import { answerItem, pollItem } from './FeedFlatList';
 
 interface Props {
-    pollid: string,
-    answers: answerResult[];
+    poll: pollItem;
 }
 
-const Vote = ({ pollid, answers }: Props) => {
+const Vote = ({ poll }: Props) => {
     const vote = (answerid: string) => {
         apiPost('/poll/vote',
             {
-                pollid,
+                pollid: poll._id,
                 answerid
             })
             .then((res) => {
@@ -23,13 +22,13 @@ const Vote = ({ pollid, answers }: Props) => {
             });
     };
 
-    const renderAnswer = ({ item }: { item: answerResult; }) => {
+    const renderAnswer = ({ item }: { item: answerItem; }) => {
         return <TouchableOpacity
             style={styles.voteCard}
-            onPress={() => { vote(item.id); }}
+            onPress={() => { vote(item._id); }}
         >
             <Text>
-                {item.answer}
+                {item.title}
             </Text>
         </TouchableOpacity>;
 
@@ -38,7 +37,7 @@ const Vote = ({ pollid, answers }: Props) => {
     return (
         <View>
             <FlatList
-                data={answers}
+                data={poll.answers}
                 renderItem={renderAnswer}
                 keyExtractor={(_, index) => `answer-${index}`}
                 style={{ height: '100%' }}

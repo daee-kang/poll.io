@@ -3,6 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { pollItem } from '../Components/FeedFlatList';
 import Vote from '../Components/Vote';
 import { STYLES } from '../Constants';
 import { preStyles } from '../Constants/cstyle';
@@ -13,31 +14,17 @@ export type PollScreenNavigationProp = StackNavigationProp<
     'poll'
 >;
 
-export type answerResult = {
-    id: string,
-    answer: string;
-};
-
 const Poll = () => {
     const navigation = useNavigation<PollScreenNavigationProp>();
     const route = useRoute<RouteProp<RootStackParamList, 'poll'>>();
 
     const [isVote, setIsVote] = useState(true);
-    const [answers, setAnswers] = useState<answerResult[]>(Array<answerResult>());
+    const [poll, setPoll] = useState<pollItem>();
 
     useEffect(() => {
-        //we have titles and id's as route params
-        let formedAnswers: answerResult[] = [];
-
-        route.params.answers.map((answer) => {
-            console.log(answer);
-            formedAnswers.push({
-                answer: answer.answer,
-                id: answer.id
-            });
-        });
-
-        setAnswers(formedAnswers);
+        //set the param poll to a local variable to make it more readable
+        //not really necessary but it's nicer like this and we like nice things
+        setPoll(route.params.poll);
     }, []);
 
 
@@ -55,19 +42,14 @@ const Poll = () => {
             </View>
 
             <Text style={preStyles.bigTitle}>
-                {route.params.question}
+                {poll?.question}
             </Text>
 
             {
-                isVote ?
-                    <Vote pollid={route.params.id} answers={answers} /> :
-                    <Vote />
+                poll && isVote ?
+                    <Vote poll={poll!} /> :
+                    null//<Vote />
             }
-
-            {/* 
-
-
-             */}
 
         </SafeAreaView>
     );

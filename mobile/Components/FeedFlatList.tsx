@@ -11,13 +11,16 @@ interface Props {
 export type pollItem = {
     _id: string,
     question: string,
-    answers: [{
-        _id: string,
-        answer: string,
-        count: number;
-    }],
+    answers: [answerItem],
     longitude: number,
     latitude: number,
+};
+
+export type answerItem = {
+    _id: string,
+    pollid: string,
+    title: string,
+    voted: number[]; //this really holds the ids to voters, length is amount voted
 };
 
 const FeedFlatList = ({ latitude, longitude }: Props) => {
@@ -80,7 +83,7 @@ const FeedFlatList = ({ latitude, longitude }: Props) => {
                 >
                     <Text style={{ backgroundColor: 'green' }}>
                         fetch nearby
-                </Text>
+                    </Text>
                 </TouchableOpacity>
             </View>
             {/* ---------------debug--------------- */}
