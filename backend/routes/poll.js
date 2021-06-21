@@ -29,14 +29,16 @@ router.get(
                     $maxDistance: range
                 }
             }
-        }, (err, data) => {
-            if (err) console.log(err);
+        })
+            .populate('answers')
+            .exec((err, data) => {
+                if (err) console.log(err);
 
-            console.log(data);
-            res.json(data);
-        },
-            (err) => {
-                console.log(err);
+                for (poll of data) {
+                    poll.populate('answers');
+                }
+                console.log(data);
+                res.json(data);
             });
     }
 );
