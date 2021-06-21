@@ -76,6 +76,7 @@ router.post(
         for (let i = 0; i < req.body.answers.length; i++) {
             let answer = await AnswerModel.create({
                 pollid: created._id,
+                title: req.body.answers[i].text,
                 voted: []
             });
             answers.push(answer._id);
