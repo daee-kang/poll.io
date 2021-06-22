@@ -15,7 +15,11 @@ const Vote = ({ poll }: Props) => {
                 answerid
             })
             .then((res) => {
-                console.log(res);
+                if (res.data != "Voted already") {
+                    console.log("VOTED");
+                } else {
+                    console.log("ALREADY VOTED");
+                }
             })
             .catch(err => {
                 console.log(err);
