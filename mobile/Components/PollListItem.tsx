@@ -1,6 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { STYLES } from '../Constants';
 import Poll, { PollScreenNavigationProp } from '../Screens/Poll';
 import { answerItem, pollItem } from './FeedFlatList';
 
@@ -45,15 +46,22 @@ const PollListItem = ({ pollItem }: Props) => {
 
 const styles = StyleSheet.create({
     container: {
-        margin: 10,
+        marginVertical: 5,
         padding: 20,
-        height: 110,
-        borderWidth: 1,
-        flexDirection: 'row'
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 2.62,
     },
     questionText: {
-        fontFamily: 'roboto-slab',
-        fontSize: 22,
+        //fontFamily: 'roboto-slab',
+        fontWeight: 'bold',
+        fontSize: 18,
         flex: 5
     },
     subTitle: {

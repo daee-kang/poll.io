@@ -148,7 +148,7 @@ export default function RootNav() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#E4F4FD',
         alignItems: 'center',
         justifyContent: 'center',
     },

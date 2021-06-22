@@ -71,7 +71,7 @@ const FeedFlatList = ({ latitude, longitude }: Props) => {
     return (
         <View>
             {/* ---------------debug--------------- */}
-            <View style={{ padding: 10 }}>
+            {/* <View style={{ padding: 10 }}>
                 <Text style={{ textAlign: 'center' }}>
                     latitude: {latitude ?? 0}
                 </Text>
@@ -85,7 +85,7 @@ const FeedFlatList = ({ latitude, longitude }: Props) => {
                         fetch nearby
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </View> */}
             {/* ---------------debug--------------- */}
             <FlatList
                 data={pollItems}

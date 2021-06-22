@@ -53,9 +53,9 @@ const Home = (props: Props) => {
         <View>
             <Header navigation={navigation} region={region} updateRegion={updateRegion} />
 
-            <TouchableOpacity onPress={signOut}>
+            {/* <TouchableOpacity onPress={signOut}>
                 <Text> logout </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <FeedFlatList
                 latitude={region?.latitude}

@@ -28,7 +28,7 @@ const MyStack = () => {
         <Stack.Navigator
             screenOptions={{
                 headerShown: false,
-                cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
             }}
         >
             <Stack.Screen name="home" component={Home} />
