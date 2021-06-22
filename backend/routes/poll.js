@@ -4,6 +4,7 @@ const AnswerModel = require('../model/Answer');
 const PollModel = require('../model/Poll');
 const UserModel = require('../model/User');
 const UserPollsModel = require('../model/UserPolls');
+const UserVotedModel = require('../model/UserVoted');
 
 const router = express.Router();
 
@@ -107,18 +108,48 @@ router.post(
 router.post(
     '/vote',
     async (req, res, next) => {
-        console.log(req.body);
         if (req.body.pollid === undefined || req.body.answerid === undefined) return res.json("missing data");
         const { pollid, answerid } = req.body;
 
-        AnswerModel.findOneAndUpdate(
-            { "_id": answerid },
-            { $push: { voted: req.user._id } },
-            { new: true })
-            .then(poll => {
-                res.send(poll);
-            })
-            .catch(err => console.log(err));
+        UserVotedModel.findOne({
+            userid: req.user._id
+        }, (err, uservote) => {
+            if (err) res.json(err);
+
+            //check to see if we voted for this post
+            if (uservote && uservote.voted.length !== 0) {
+                for (let vote of uservote.voted) {
+                    if (vote.pollid == pollid) {
+                        return res.json("Voted already");
+                    }
+                }
+
+                //update answer model and finally to uservoted
+                AnswerModel.findOneAndUpdate(
+                    { "_id": answerid },
+                    { $push: { voted: req.user._id } },
+                    { new: true })
+                    .then(poll => {
+                        UserVotedModel.findOneAndUpdate({
+                            userid: req.user._id
+                        },
+                            {
+                                $push: {
+                                    voted: {
+                                        pollid,
+                                        answerid
+                                    }
+                                }
+                            },
+                            { upsert: true })
+                            .then(result => {
+                                console.log(result);
+                                res.send(result);
+                            });
+                    })
+                    .catch(err => console.log(err));
+            }
+        });
     }
 );
 
