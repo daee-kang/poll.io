@@ -123,32 +123,32 @@ router.post(
                         return res.json("Voted already");
                     }
                 }
-
-                //update answer model and finally to uservoted
-                AnswerModel.findOneAndUpdate(
-                    { "_id": answerid },
-                    { $push: { voted: req.user._id } },
-                    { new: true })
-                    .then(poll => {
-                        UserVotedModel.findOneAndUpdate({
-                            userid: req.user._id
-                        },
-                            {
-                                $push: {
-                                    voted: {
-                                        pollid,
-                                        answerid
-                                    }
-                                }
-                            },
-                            { upsert: true })
-                            .then(result => {
-                                console.log(result);
-                                res.send(result);
-                            });
-                    })
-                    .catch(err => console.log(err));
             }
+
+            //update answer model and finally to uservoted
+            AnswerModel.findOneAndUpdate(
+                { "_id": answerid },
+                { $push: { voted: req.user._id } },
+                { new: true })
+                .then(poll => {
+                    UserVotedModel.findOneAndUpdate({
+                        userid: req.user._id
+                    },
+                        {
+                            $push: {
+                                voted: {
+                                    pollid,
+                                    answerid
+                                }
+                            }
+                        },
+                        { upsert: true })
+                        .then(result => {
+                            console.log(result);
+                            res.send(result);
+                        });
+                })
+                .catch(err => console.log(err));
         });
     }
 );
