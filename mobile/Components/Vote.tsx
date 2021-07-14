@@ -70,12 +70,15 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         height: 80,
         marginVertical: 10,
+        marginHorizontal: 15,
         justifyContent: 'center',
         padding: 20,
         borderRadius: 5,
     },
     selected: {
         borderColor: COLORS.PRIMARY,
+        marginLeft: 20,
+        marginRight: 10
     },
     submit: {
         backgroundColor: COLORS.RED,
