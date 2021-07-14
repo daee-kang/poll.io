@@ -1,5 +1,6 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Touchable } from 'react-native';
+import { COLORS } from '../Constants';
 import { apiPost } from '../utils/api';
 import { answerItem, pollItem } from './FeedFlatList';
 
@@ -8,6 +9,8 @@ interface Props {
 }
 
 const Vote = ({ poll }: Props) => {
+    const [selected, setSelected] = useState<string | null>(null); //_id
+
     const vote = (answerid: string) => {
         apiPost('/poll/vote',
             {
@@ -28,8 +31,8 @@ const Vote = ({ poll }: Props) => {
 
     const renderAnswer = ({ item }: { item: answerItem; }) => {
         return <TouchableOpacity
-            style={styles.voteCard}
-            onPress={() => { vote(item._id); }}
+            style={[styles.voteCard, selected === item._id ? styles.selected : null]}
+            onPress={() => { setSelected(item._id); }}
         >
             <Text>
                 {item.title}
@@ -39,13 +42,26 @@ const Vote = ({ poll }: Props) => {
     };
 
     return (
-        <View>
-            <FlatList
-                data={poll.answers}
-                renderItem={renderAnswer}
-                keyExtractor={(_, index) => `answer-${index}`}
-                style={{ height: '100%' }}
-            />
+        <View style={{ flex: 1 }}>
+            <View style={{ flex: 1 }}>
+                <FlatList
+                    data={poll.answers}
+                    renderItem={renderAnswer}
+                    keyExtractor={(_, index) => `answer-${index}`}
+                />
+            </View>
+
+            <Animated.View>
+                <TouchableOpacity
+                    style={
+                        [styles.submit, selected === null ? styles.disabled : null]
+                    }
+                    disabled={selected === null}
+                    onPress={() => vote(selected!)}
+                >
+                    <Text style={{ textAlign: 'center' }}>SUBMIT</Text>
+                </TouchableOpacity>
+            </Animated.View>
         </View>
     );
 };
@@ -59,6 +75,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 20,
         borderRadius: 5,
+    },
+    selected: {
+        borderColor: COLORS.PRIMARY,
+    },
+    submit: {
+        backgroundColor: COLORS.RED,
+        justifyContent: 'center',
+        marginBottom: 20,
+        marginHorizontal: 40,
+        padding: 20,
+        borderRadius: 20
+    },
+    disabled: {
+        backgroundColor: 'gray'
     }
 });
 
