@@ -51,17 +51,15 @@ const Vote = ({ poll }: Props) => {
                 />
             </View>
 
-            <Animated.View>
-                <TouchableOpacity
-                    style={
-                        [styles.submit, selected === null ? styles.disabled : null]
-                    }
-                    disabled={selected === null}
-                    onPress={() => vote(selected!)}
-                >
-                    <Text style={{ textAlign: 'center' }}>SUBMIT</Text>
-                </TouchableOpacity>
-            </Animated.View>
+            <TouchableOpacity
+                style={
+                    [styles.submit, selected === null ? styles.disabled : null]
+                }
+                disabled={selected === null}
+                onPress={() => vote(selected!)}
+            >
+                <Text style={{ textAlign: 'center' }}>SUBMIT</Text>
+            </TouchableOpacity>
         </View>
     );
 };
