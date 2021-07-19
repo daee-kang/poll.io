@@ -29,9 +29,11 @@ const FeedFlatList = ({ latitude, longitude }: Props) => {
 
     useEffect(() => {
         getNearby();
-    }, []);
+    }, [latitude, longitude]);
 
     const getNearby = () => {
+        setRefreshing(true);
+
         apiGet("/poll/get", {
             latitude: latitude ?? 0,
             longitude: longitude ?? 0,
@@ -63,11 +65,6 @@ const FeedFlatList = ({ latitude, longitude }: Props) => {
         />;
     };
 
-    const onRefresh = () => {
-        setRefreshing(true);
-        getNearby();
-    };
-
     return (
         <View>
             {/* ---------------debug--------------- */}
@@ -91,10 +88,28 @@ const FeedFlatList = ({ latitude, longitude }: Props) => {
                 data={pollItems}
                 renderItem={renderPoll}
                 keyExtractor={item => item._id}
-                onRefresh={onRefresh}
+                onRefresh={getNearby}
                 refreshing={refreshing}
                 style={{ height: '100%' }}
             />
+
+            {/* this is just temp for now */}
+            {refreshing &&
+                <View style={{
+                    position: 'absolute',
+                    width: '100%',
+                    alignContent: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <Text style={{
+                        textAlign: 'center',
+                        backgroundColor: 'yellow'
+                    }}>
+                        loading be patient my bruh xDDD
+                    </Text>
+                </View>
+            }
+
 
         </View>
     );

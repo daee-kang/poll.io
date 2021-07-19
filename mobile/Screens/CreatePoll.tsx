@@ -6,9 +6,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import cstyles from '../Components/StyleGuide';
 import { COLORS } from '../Constants';
 import { RootStackParamList } from '../Navigation/StackNavigation';
-import { api, apiPost } from '../utils/api';
+import { apiPost } from '../utils/api';
 import { defaultRegion } from '../Screens/Map';
-import { Region } from 'react-native-maps';
 
 export type CreatePollScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
