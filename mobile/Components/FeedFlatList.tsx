@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, FlatList } from 'react-native';
-import { apiGet } from '../utils/api';
+import { apiGet, updateVoted } from '../utils/api';
 import PollListItem from './PollListItem';
 
 interface Props {
@@ -51,11 +51,11 @@ const FeedFlatList = ({ latitude, longitude }: Props) => {
             });
             setPollItems(newData);
             setRefreshing(false);
+            updateVoted();
         });
     };
 
     const renderPoll = ({ item }: { item: pollItem; }) => {
-        console.log(item);
         if (item === undefined) return null;
 
         return <PollListItem

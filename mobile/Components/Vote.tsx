@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Touchable } from 'react-native';
 import { COLORS } from '../Constants';
-import { apiPost } from '../utils/api';
+import { apiPost, updateVoted, votesCached } from '../utils/api';
 import { answerItem, pollItem } from './FeedFlatList';
 
 interface Props {
@@ -9,7 +9,23 @@ interface Props {
 }
 
 const Vote = ({ poll }: Props) => {
+    const [prevVoted, setPrevVoted] = useState<string | null>(null);
     const [selected, setSelected] = useState<string | null>(null); //_id
+    const [disabled, setDisbled] = useState(false);
+
+    useEffect(() => {
+        for (let vote of votesCached) {
+            if (vote.pollid === poll._id) {
+                setPrevVoted(vote.answerid);
+                setSelected(vote.answerid);
+                setDisbled(true);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        setDisbled(prevVoted == selected);
+    }, [selected, prevVoted]);
 
     const vote = (answerid: string) => {
         apiPost('/poll/vote',
@@ -19,8 +35,11 @@ const Vote = ({ poll }: Props) => {
             })
             .then((res) => {
                 if (res.data != "Voted already") {
+                    updateVoted();
+                    setPrevVoted(answerid);
                     console.log("VOTED");
                 } else {
+                    //this really shouldn't hit
                     console.log("ALREADY VOTED");
                 }
             })
@@ -31,7 +50,11 @@ const Vote = ({ poll }: Props) => {
 
     const renderAnswer = ({ item }: { item: answerItem; }) => {
         return <TouchableOpacity
-            style={[styles.voteCard, selected === item._id ? styles.selected : null]}
+            style={[
+                styles.voteCard,
+                selected === item._id ? styles.selected : null,
+                (prevVoted === item._id && prevVoted === selected) ? styles.voted : null,
+            ]}
             onPress={() => { setSelected(item._id); }}
         >
             <Text>
@@ -52,13 +75,16 @@ const Vote = ({ poll }: Props) => {
             </View>
 
             <TouchableOpacity
-                style={
-                    [styles.submit, selected === null ? styles.disabled : null]
-                }
-                disabled={selected === null}
+                style={[
+                    styles.submit,
+                    (disabled || selected === null) ? styles.disabled : null
+                ]}
+                disabled={(disabled || selected === null)}
                 onPress={() => vote(selected!)}
             >
-                <Text style={{ textAlign: 'center' }}>SUBMIT</Text>
+                <Text style={{ textAlign: 'center' }}>
+                    {prevVoted !== null ? `RESUBMIT` : `SUBMIT`}
+                </Text>
             </TouchableOpacity>
         </View>
     );
@@ -79,6 +105,9 @@ const styles = StyleSheet.create({
         borderColor: COLORS.PRIMARY,
         marginLeft: 20,
         marginRight: 10
+    },
+    voted: {
+        borderColor: COLORS.GREEN,
     },
     submit: {
         backgroundColor: COLORS.RED,

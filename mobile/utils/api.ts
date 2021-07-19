@@ -31,13 +31,13 @@ const apiPost = async (path: string, body: any) => {
         });
 };
 
-const apiGet = async (path: string, params: any) => {
+const apiGet = async (path: string, params?: any) => {
     const userToken = await AsyncStorage.getItem('userToken');
 
     return api.get(
         path,
         {
-            params,
+            params: params ?? null,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `bearer ${userToken}`
@@ -46,10 +46,30 @@ const apiGet = async (path: string, params: any) => {
     );
 };
 
+const updateVoted = () => {
+    apiGet('/poll/getUserVotes')
+        .then((data) => {
+            if (data.data === `Error: no votes`) {
+                votesCached = [];
+            } else {
+                votesCached = data.data;
+                console.log('voted upated: ', votesCached);
+            }
+        });
+};
+
+let votesCached: Array<{
+    _id: string,
+    answerid: string,
+    pollid: string;
+}>;
+
 export {
     api,
     apiPost,
     apiGet,
     stringify,
-    header
+    header,
+    updateVoted,
+    votesCached
 };

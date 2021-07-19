@@ -153,4 +153,51 @@ router.post(
     }
 );
 
+/* 
+    TO-DO: 
+    we can possible cache all our vote results on application load and other parts so that
+    instead of loading each time we open a poll page, we don't query individually everytime
+*/
+router.get(
+    '/getUserVotes',
+    async (req, res, next) => {
+        UserVotedModel.findOne(
+            { userid: req.user._id }
+        ).then(data => {
+            if (!data) {
+                return res.json(`Error: no votes`);
+            }
+            //return voted array
+            res.json(data.voted);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+);
+
+router.get(
+    '/getUserVoteFromPoll',
+    async (req, res, next) => {
+        console.log(req.query);
+        if (req.query.pollid === undefined) return res.json("Missing pollid");
+
+        UserVotedModel.findOne(
+            { userid: req.user._id }
+        ).then(data => {
+            if (!data) {
+                return res.json(`Error: no votes`);
+            }
+
+            for (let i = 0; i < data.voted.length; i++)
+                if (data.voted[i].pollid == req.query.pollid)
+                    return res.json(data.voted[i].answerid);
+
+            //return voted array
+            return res.json(`Not voted`);
+        }).catch(err => {
+            console.log(err);
+        });
+    }
+);
+
 module.exports = router;

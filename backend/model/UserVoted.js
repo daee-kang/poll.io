@@ -10,6 +10,8 @@ const UserVotedSchema = new Schema({
     }],
 });
 
+UserVotedSchema.index({ userid: 1 });
+
 const UserVotedModel = mongoose.model('uservoted', UserVotedSchema);
 
 module.exports = UserVotedModel;

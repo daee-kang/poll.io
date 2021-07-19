@@ -7,7 +7,7 @@ import * as Location from 'expo-location';
 import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../Navigation/StackNavigation';
-import { apiGet } from '../utils/api';
+import { apiGet, updateVoted, } from '../utils/api';
 import FeedFlatList from '../Components/FeedFlatList';
 
 export type HomeScreenNavigationProp = StackNavigationProp<
@@ -47,6 +47,8 @@ const Home = (props: Props) => {
                 longitudeDelta: 0.0421
             });
         })();
+
+        updateVoted();
     }, []);
 
     return (

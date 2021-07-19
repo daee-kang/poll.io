@@ -8,6 +8,7 @@ import Vote from '../Components/Vote';
 import { STYLES } from '../Constants';
 import { preStyles } from '../Constants/cstyle';
 import { RootStackParamList } from '../Navigation/StackNavigation';
+import { apiGet } from '../utils/api';
 
 export type PollScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
@@ -18,18 +19,30 @@ const Poll = () => {
     const navigation = useNavigation<PollScreenNavigationProp>();
     const route = useRoute<RouteProp<RootStackParamList, 'poll'>>();
 
-    const [isVote, setIsVote] = useState(true);
-    const [poll, setPoll] = useState<pollItem>();
+    const [isVote, setIsVote] = useState<string | null>(null); //holds answer id
+    const [poll, setPoll] = useState<pollItem>(route.params.poll);
 
     useEffect(() => {
-        //set the param poll to a local variable to make it more readable
-        //not really necessary but it's nicer like this and we like nice things
-        setPoll(route.params.poll);
+        // //check if the user already voted for this poll
+        // apiGet('/poll/getUserVoteFromPoll',
+        //     {
+        //         pollid: route.params.poll._id
+        //     }
+        // ).then((res) => {
+        //     if (res.data === `Not voted`) {
+        //         //leave isVote as null
+        //         return;
+        //     } else {
+        //         console.log(res.data);
+        //         setIsVote(res.data);
+        //     }
+        // });
     }, []);
 
 
     return (
         <SafeAreaView style={styles.page}>
+
             <View style={styles.header}>
                 <TouchableOpacity style={{ flex: 1 }}
                     onPress={() => navigation.goBack()}
@@ -45,11 +58,7 @@ const Poll = () => {
                 {poll?.question}
             </Text>
 
-            {
-                poll && isVote ?
-                    <Vote poll={poll!} /> :
-                    null//<Vote />
-            }
+            <Vote poll={poll!} />
 
         </SafeAreaView>
     );
