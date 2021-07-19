@@ -40,6 +40,7 @@ const Vote = ({ poll }: Props) => {
                     console.log("VOTED");
                 } else {
                     //this really shouldn't hit
+                    //we can add resubmit feature maybe
                     console.log("ALREADY VOTED");
                 }
             })

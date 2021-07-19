@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SignIn from './AuthScreens/SignIn';
 import SignUp from './AuthScreens/SignUp';
-import Home from './Screens/Home';
 import { api, stringify, header } from './utils/api';
 
 import { AuthContext } from './Context/authContext';
