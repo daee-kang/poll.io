@@ -6,10 +6,14 @@ import { COLORS } from '../Constants';
 import { useNavigation } from '@react-navigation/core';
 import { HomeScreenNavigationProp } from '../Screens/Home';
 import { MapProps } from '../Screens/Map';
+import { Region } from 'react-native-maps';
 
 
 interface Props extends MapProps {
     navigation: HomeScreenNavigationProp,
+    region: Region | undefined,
+    updateRegion: (inRegion: Region) => void;
+    grabCurrentLocation: () => Promise<void>;
 }
 
 const Header = (props: Props) => {

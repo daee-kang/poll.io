@@ -25,35 +25,39 @@ const Home = (props: Props) => {
 
     const [region, setRegion] = useState<Region | undefined>();
 
+    useEffect(() => {
+        updateVoted();
+    }, []);
+
     const updateRegion = (inRegion: Region) => {
         setRegion(inRegion);
     };
 
-    useEffect(() => {
-        //on initial load, just set location to current location
-        (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                //TO-DO: add error messaging for this
-                console.log("no access granted");
-                return;
-            }
+    const grabCurrentLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            //TO-DO: add error messaging for this
+            console.log("no access granted");
+            return;
+        }
 
-            let location = await Location.getCurrentPositionAsync({});
-            setRegion({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
-            });
-        })();
-
-        updateVoted();
-    }, []);
+        let location = await Location.getCurrentPositionAsync({});
+        setRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+        });
+    };
 
     return (
         <View>
-            <Header navigation={navigation} region={region} updateRegion={updateRegion} />
+            <Header
+                navigation={navigation}
+                region={region}
+                grabCurrentLocation={grabCurrentLocation}
+                updateRegion={updateRegion}
+            />
 
             {/* <TouchableOpacity onPress={signOut}>
                 <Text> logout </Text>
@@ -62,6 +66,7 @@ const Home = (props: Props) => {
             <FeedFlatList
                 latitude={region?.latitude}
                 longitude={region?.longitude}
+                refreshCurrentLocation={grabCurrentLocation}
             />
 
         </ View>

@@ -5,7 +5,8 @@ import PollListItem from './PollListItem';
 
 interface Props {
     latitude: number | undefined,
-    longitude: number | undefined;
+    longitude: number | undefined,
+    refreshCurrentLocation: () => Promise<void>;
 }
 
 export type pollItem = {
@@ -23,7 +24,7 @@ export type answerItem = {
     voted: number[]; //this really holds the ids to voters, length is amount voted
 };
 
-const FeedFlatList = ({ latitude, longitude }: Props) => {
+const FeedFlatList = ({ latitude, longitude, refreshCurrentLocation }: Props) => {
     const [pollItems, setPollItems] = useState<pollItem[]>(Array<pollItem>());
     const [refreshing, setRefreshing] = useState(false);
 
@@ -31,8 +32,10 @@ const FeedFlatList = ({ latitude, longitude }: Props) => {
         getNearby();
     }, [latitude, longitude]);
 
-    const getNearby = () => {
+    const getNearby = async () => {
         setRefreshing(true);
+
+        await refreshCurrentLocation();
 
         apiGet("/poll/get", {
             latitude: latitude ?? 0,
