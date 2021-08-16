@@ -13,9 +13,10 @@ export type AuthStackParamList = {
 //async function for fetch fonts
 const fetchFonts = () => {
   return Font.loadAsync({
-    'roboto-slab-bold': require('./assets/Fonts/RobotoSlab-Bold.ttf'),
-    'roboto-slab': require('./assets/Fonts/RobotoSlab-Regular.ttf'),
-    'roboto-slab-light': require('./assets/Fonts/RobotoSlab-Light.ttf')
+    'avenir-heavy': require('./assets/Fonts/Metropolis-SemiBold.otf'),
+    'avenir-medium': require('./assets/Fonts/Metropolis-Medium.otf'),
+    'avenir-roman': require('./assets/Fonts/AvenirLTStd-Roman.otf'),
+    'avenir-light': require('./assets/Fonts/Metropolis-Light.otf')
   });
 };
 
