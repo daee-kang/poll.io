@@ -9,11 +9,13 @@ import { api, stringify, header } from './utils/api';
 
 import { AuthContext } from './Context/authContext';
 import StackNavigation from './Navigation/StackNavigation';
+import AuthEntry from './AuthScreens/AuthEntry';
 
 const AuthStack = createStackNavigator();
 
 //navigator type exports
 export type AuthStackParamList = {
+    Entry: undefined,
     SignIn: undefined,
     SignUp: undefined;
 };
@@ -129,6 +131,11 @@ export default function RootNav() {
                         screenOptions={{
                             headerShown: false
                         }}>
+                        <AuthStack.Screen
+                            name="Entry"
+                            component={AuthEntry}
+                            s
+                        />
                         <AuthStack.Screen
                             name="SignIn"
                             component={SignIn}

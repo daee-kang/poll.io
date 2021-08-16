@@ -1,11 +1,18 @@
 import { StyleSheet } from "react-native";
 
 const COLORS = {
-    PRIMARY: '#FFBC42',
-    SECONDARY: '#0496FF',
-    RED: "#e74645",
-    GREEN: 'green',
-    DARKBLUE: '#023e8a',
+    PRIMARY: '#763AFF',
+    TEXT: '#172866',
+    RED: "#FD5E5A",
+    WHITE: '#FFFFFF',
+    YELLOW: '#F9B406'
+};
+
+const FONTS = {
+    BOLD: 'avenir-heavy',
+    MEDIUM: 'avenir-medium',
+    REGULAR: 'avenir-roman',
+    LIGHT: 'avenir-light'
 };
 
 const STYLES = {
@@ -24,4 +31,4 @@ const preStyles = StyleSheet.create({
     }
 });
 
-export { COLORS, STYLES, preStyles };
+export { COLORS, FONTS, STYLES, preStyles };

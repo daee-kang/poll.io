@@ -1,3 +1,3 @@
-import { COLORS, STYLES } from "./cstyle";
+import { COLORS, FONTS, STYLES } from "./cstyle";
 
-export { COLORS, STYLES };
+export { COLORS, FONTS, STYLES };
