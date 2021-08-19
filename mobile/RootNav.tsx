@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SignIn from './AuthScreens/SignIn';
 import SignUp from './AuthScreens/SignUp';
@@ -120,7 +120,14 @@ export default function RootNav() {
 
     return (
         <AuthContext.Provider value={authContext}>
-            < NavigationContainer >
+            < NavigationContainer theme={{
+                //we need this for the background to be white
+                ...DefaultTheme,
+                colors: {
+                    ...DefaultTheme.colors,
+                    background: '#fff'
+                },
+            }}>
                 {state.userToken ?
 
                     < StackNavigation />
@@ -134,7 +141,6 @@ export default function RootNav() {
                         <AuthStack.Screen
                             name="Entry"
                             component={AuthEntry}
-                            s
                         />
                         <AuthStack.Screen
                             name="SignIn"
@@ -150,12 +156,3 @@ export default function RootNav() {
         </AuthContext.Provider>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#E4F4FD',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});

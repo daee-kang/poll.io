@@ -20,15 +20,24 @@ const STYLES = {
     PAGEPADDING: 10,
 };
 
-const preStyles = StyleSheet.create({
+const CSTYLE = StyleSheet.create({
     bigTitle: {
-        fontFamily: 'roboto-slab-bold',
-        fontSize: 30,
+        fontFamily: 'avenir-heavy',
+        fontSize: 50,
+        color: COLORS.TEXT
     },
     title: {
-        fontFamily: 'roboto-slab',
+        fontFamily: 'avenir-heavy',
         fontSize: 22,
+        color: COLORS.TEXT
+    },
+    page: {
+        flex: 1,
+        alignContent: 'center',
+        justifyContent: 'center',
+        padding: 20,
+        marginTop: 80
     }
 });
 
-export { COLORS, FONTS, STYLES, preStyles };
+export { COLORS, FONTS, STYLES, CSTYLE };

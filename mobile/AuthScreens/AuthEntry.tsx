@@ -1,6 +1,8 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity, Button, SafeAreaView } from 'react-native';
+import TouchButton from '../Components/TouchButton';
+import { CSTYLE } from '../Constants';
 import { AuthStackParamList } from '../RootNav';
 
 interface Props {
@@ -8,11 +10,25 @@ interface Props {
 }
 
 const AuthEntry = ({ navigation }: Props) => {
-
     return (
-        <View>
-            <Text></Text>
-        </View>
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={CSTYLE.page}>
+                <View style={{ flex: 1 }}>
+                    <Text style={CSTYLE.bigTitle}>Poll now</Text>
+                    <Text>add some bull shit here</Text>
+                </View>
+                <View
+                    style={{
+                        width: '100%',
+                        flexDirection: 'row'
+                    }}
+                >
+                    <TouchButton onPress={() => navigation.navigate('SignIn')} label={"Login"} />
+                    <View style={{ width: 10 }} />
+                    <TouchButton onPress={() => navigation.navigate('SignUp')} label={"Sign Up"} invert />
+                </View>
+            </View>
+        </SafeAreaView>
     );
 };
 
