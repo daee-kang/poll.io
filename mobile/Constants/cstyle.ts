@@ -5,7 +5,8 @@ const COLORS = {
     TEXT: '#172866',
     RED: "#FD5E5A",
     WHITE: '#FFFFFF',
-    YELLOW: '#F9B406'
+    YELLOW: '#F9B406',
+    LIGHTGRAY: '#F8F8FB'
 };
 
 const FONTS = {
@@ -16,19 +17,29 @@ const FONTS = {
 };
 
 const STYLES = {
-    BORDERRADIUS: 15,
-    PAGEPADDING: 10,
+    BORDERRADIUS: 10,
+    PAGEPADDING: 20,
 };
 
 const CSTYLE = StyleSheet.create({
     bigTitle: {
-        fontFamily: 'avenir-heavy',
+        fontFamily: FONTS.BOLD,
         fontSize: 50,
         color: COLORS.TEXT
     },
     title: {
-        fontFamily: 'avenir-heavy',
-        fontSize: 22,
+        fontFamily: FONTS.BOLD,
+        fontSize: 28,
+        color: COLORS.TEXT
+    },
+    bold: {
+        fontFamily: FONTS.BOLD,
+        fontSize: 16,
+        color: COLORS.TEXT
+    },
+    normal: {
+        fontFamily: FONTS.LIGHT,
+        fontSize: 14,
         color: COLORS.TEXT
     },
     page: {
@@ -37,6 +48,14 @@ const CSTYLE = StyleSheet.create({
         justifyContent: 'center',
         padding: 20,
         marginTop: 80
+    },
+    textInput: {
+        backgroundColor: COLORS.LIGHTGRAY,
+        height: 48,
+        borderRadius: STYLES.BORDERRADIUS,
+        marginVertical: 10,
+        paddingHorizontal: 15,
+        fontFamily: FONTS.REGULAR
     }
 });
 
