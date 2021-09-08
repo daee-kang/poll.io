@@ -1,10 +1,16 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useState, useContext } from 'react';
-import { View, Text, StyleSheet, TextInput, Button, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
 import { AuthStackParamList } from '../App';
-import { Ionicons } from '@expo/vector-icons';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
 
 import { AuthContext } from '../Context/authContext';
+import StackHeader from '../Components/StackHeader';
+import { COLORS, CSTYLE } from '../Constants';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Controller, useForm } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
+import TouchButton from '../Components/TouchButton';
 
 interface Props {
     navigation: StackNavigationProp<AuthStackParamList, 'SignUp'>;
@@ -12,213 +18,198 @@ interface Props {
 
 const SignUp = ({ navigation }: Props) => {
     const { signUp } = useContext(AuthContext);
+    const { control, handleSubmit, formState: { errors, isValid }, getValues } = useForm({ criteriaMode: 'all' });
+    const [passwordHidden, setPasswordHidden] = useState(true);
 
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [password2, setPassword2] = useState("");
-
-    const [error, dispatch] = React.useReducer(
-        (prevState: any, action: any) => {
-            switch (action.type) {
-                case 'ERROR':
-                    return {
-                        ...prevState,
-                        errorMessage: action.message,
-                        isError: true
-                    };
-                case 'CLEAR':
-                    return {
-                        ...prevState,
-                        errorMessage: '',
-                        isError: false
-                    };
-            }
-        },
-        {
-            isError: false,
-            errorMessage: ''
-        }
-    );
-
-    const validate = () => {
-        let message = "";
-        if (username === "") {
-            message = "Username cannot be blank";
-        } else if (email === "") {
-            message = "Email cannot be blank";
-        } else if (password === "") {
-            message = "Password cannot be blank";
-        } else if (password2 === "") {
-            message = "Confirm password";
-        } else if (!validateEmail()) {
-            message = "Invalid email";
-        } else if (!validatePassword()) {
-            message = "Password should contain at least one digit, one upper case, and must be 8 characters long";
-        } else if (password !== password2) {
-            message = "Confirmed password doesn't match";
-        }
-        if (message === "") return true;
-
-        dispatch({ type: 'ERROR', message });
-        return false;
-    };
-
-    const validateEmail = () => {
-        if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email))
-            return true;
-        return false;
-    };
-
-    const validatePassword = () => {
-        if (/^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password))
-            return true;
-        return false;
-    };
-
-    const validateAndSignup = () => {
-        dispatch({ type: 'CLEAR' });
-
-        if (!validate()) return;
-
+    const onSubmit = () => {
         const data = {
-            username,
-            email,
-            password
+            username: getValues('username'),
+            email: getValues('email'),
+            password: getValues('password')
         };
-
-        //err will only be set if there is an error. Otherwise, rootnav will
-        //transition into logged in state and forget about this here.
-        signUp(data, validateCallback);
+        signUp(data, signupCallback);
     };
 
-    const validateCallback = (err: string) => {
-        if (err === undefined) {
-            dispatch({ type: 'ERROR', message: "Unknown error" });
-        } else {
-            dispatch({ type: 'ERROR', message: err });
-        }
+    const signupCallback = (err: string) => {
+        console.log(err);
     };
 
     return (
-        <View style={styles.page}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text style={styles.back}>
-                    <Ionicons name="arrow-back-outline" size={20} />goback
+        <SafeAreaView style={{ flex: 1 }}>
+            <StackHeader
+                Left={
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <AntDesign name="left" size={24} color="black" />
+                    </TouchableOpacity>
+                }
+                Right={
+                    <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+                        <View style={{ height: 22 }}>
+                            <View style={{ flex: 1 }} />
+                            <Text style={CSTYLE.bold}>
+                                Login
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                }
+            />
+
+            <KeyboardAvoidingView
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                style={styles.authPage}
+            >
+                <Text style={CSTYLE.title}>
+                    Sign Up
                 </Text>
-            </TouchableOpacity>
-            <Text style={styles.title}>sign up:</Text>
+                <ErrorMessage
+                    name="lol"
+                    errors={errors}
+                    render={
+                        ({ message }) => <Text>
+                            {message}
+                        </Text>
+                    }
+                />
 
-            <View style={{ height: 15 }} />
+                <View style={styles.formContainer}>
+                    <Text style={styles.label}>
+                        Email Address
+                    </Text>
+                    <Controller
+                        control={control}
+                        name="email"
+                        render={({ field: { onChange, value, onBlur } }) => (
+                            <TextInput
+                                value={value}
+                                onBlur={onBlur}
+                                onChangeText={value => onChange(value)}
+                                style={CSTYLE.textInput}
+                            />
+                        )}
+                        rules={{
+                            required: {
+                                value: true,
+                                message: 'Please enter an email address'
+                            }
+                        }}
+                    />
 
-            <TextInput
-                style={styles.textInput}
-                value={username}
-                onChangeText={(text) => setUsername(text)}
-                autoCorrect={false}
-                placeholder="username"
-            />
+                    <Text style={styles.label}>
+                        Username
+                    </Text>
+                    <Controller
+                        control={control}
+                        name="username"
+                        render={({ field: { onChange, value, onBlur } }) => (
+                            <TextInput
+                                value={value}
+                                onBlur={onBlur}
+                                onChangeText={value => onChange(value)}
+                                style={CSTYLE.textInput}
+                            />
+                        )}
+                        rules={{
+                            required: {
+                                value: true,
+                                message: 'Please enter a username'
+                            }
+                        }}
+                    />
 
-            <TextInput
-                style={styles.textInput}
-                value={email}
-                onChangeText={(text) => setEmail(text)}
-                autoCorrect={false}
-                placeholder="email address"
-                autoCompleteType="email"
-            />
+                    <Text style={styles.label}>
+                        Password
+                    </Text>
+                    <Controller
+                        control={control}
+                        name="password"
+                        render={({ field: { onChange, value, onBlur } }) => (
+                            <View style={styles.eyeWrapper}>
+                                <TextInput
+                                    value={value}
+                                    onBlur={onBlur}
+                                    onChangeText={value => onChange(value)}
+                                    style={CSTYLE.textInput}
+                                    secureTextEntry={passwordHidden}
+                                />
 
-            <View style={{ height: 15 }} />
+                                <FontAwesome name={`${passwordHidden ? 'eye-slash' : 'eye'}`} size={24} color={COLORS.TEXT} style={styles.eye} onPress={() => {
+                                    setPasswordHidden(!passwordHidden);
+                                }} />
+                            </View>
+                        )}
+                        rules={{
+                            required: {
+                                value: true,
+                                message: 'Please enter a password'
+                            }
+                        }}
+                    />
 
-            <TextInput
-                style={styles.textInput}
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-                autoCorrect={false}
-                autoCapitalize="none"
-                autoCompleteType="password"
-                secureTextEntry={true}
-                placeholder="password"
-                textContentType={'oneTimeCode'}
-            />
-            <TextInput
-                style={styles.textInput}
-                value={password2}
-                onChangeText={(text) => setPassword2(text)}
-                autoCorrect={false}
-                autoCapitalize="none"
-                autoCompleteType="password"
-                secureTextEntry={true}
-                placeholder="confirm password"
-                textContentType={'oneTimeCode'}
-            />
+                    <Text style={styles.label}>
+                        Confirm Password
+                    </Text>
+                    <Controller
+                        control={control}
+                        name="confirmpassword"
+                        render={({ field: { onChange, value, onBlur } }) => (
+                            <View style={styles.eyeWrapper}>
+                                <TextInput
+                                    value={value}
+                                    onBlur={onBlur}
+                                    onChangeText={value => onChange(value)}
+                                    style={CSTYLE.textInput}
+                                    secureTextEntry={passwordHidden}
+                                />
 
-            <Text style={styles.error}>{error.errorMessage}</Text>
+                                <FontAwesome name={`${passwordHidden ? 'eye-slash' : 'eye'}`} size={24} color={COLORS.TEXT} style={styles.eye} onPress={() => {
+                                    setPasswordHidden(!passwordHidden);
+                                }} />
+                            </View>
+                        )}
+                        rules={{
+                            required: {
+                                value: true,
+                                message: 'Please confirm your password'
+                            }
+                        }}
+                    />
 
-            <View style={{ marginTop: 50 }}>
-                <TouchableOpacity onPress={validateAndSignup}>
-                    <View style={styles.signupButton}>
-                        <Text style={styles.signupText}>sign up</Text>
+                    <View style={{ height: 50, marginTop: 30 }}>
+                        <TouchButton onPress={handleSubmit(onSubmit)} label="Login" />
                     </View>
-                </TouchableOpacity>
-            </View>
-
-
-            <View style={{ flex: 1 }} />
-        </View>
+                </View>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
-    page: {
+    authPage: {
+        ...CSTYLE.page,
         flex: 1,
         alignContent: 'center',
         justifyContent: 'center',
         padding: 40,
-        marginTop: 50,
     },
-    title: {
-        fontFamily: 'roboto-slab-bold',
-        fontSize: 65,
-        textAlign: 'left',
-        color: '#FFBC42'
+    formContainer: {
+        marginTop: 42,
     },
-    textInput: {
-        backgroundColor: 'lightgray',
-        width: "100%",
-        height: 55,
-        marginVertical: 10,
-        paddingHorizontal: 15,
-        borderRadius: 10,
-        fontFamily: 'roboto-slab',
-        fontSize: 18
+    label: {
+        ...CSTYLE.normal,
+        paddingHorizontal: 5
     },
-    inputHeader: {
-        fontFamily: 'roboto-slab-bold',
+    eyeWrapper: {
+        position: 'relative'
     },
-    back: {
-        fontSize: 20,
-        fontFamily: 'roboto-slab-bold',
-        color: "#0496FF"
+    eye: {
+        position: 'absolute',
+        top: 22,
+        right: 12,
     },
-    signupButton: {
-        backgroundColor: "#0496FF",
-        height: 55,
-        borderRadius: 10,
-        justifyContent: 'center',
-        marginBottom: 20,
-    },
-    signupText: {
-        fontFamily: 'roboto-slab-bold',
-        fontSize: 20,
-        textAlign: 'center'
-    },
-    error: {
-        textAlign: 'center',
-        fontFamily: 'roboto-slab',
-        color: '#d62828'
-
+    eyeInput: {
+        ...CSTYLE.textInput,
+        paddingRight: 50
     }
 });
 
-export default SignUp;
+export default SignUp;;

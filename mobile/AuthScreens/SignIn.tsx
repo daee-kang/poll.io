@@ -10,7 +10,6 @@ import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { AuthContext } from '../Context/authContext';
 import StackHeader from '../Components/StackHeader';
 import TouchButton from '../Components/TouchButton';
-import { TouchableWithoutFeedbackBase } from 'react-native';
 import { ErrorMessage } from '@hookform/error-message';
 
 interface Props {
@@ -21,14 +20,20 @@ const SignIn = ({ navigation }: Props) => {
 
 
     const { signIn } = useContext(AuthContext);
-    const { control, handleSubmit, formState: { errors, isValid } } = useForm({ criteriaMode: 'all' });
+    const { control, handleSubmit, formState: { errors, isValid }, getValues } = useForm({ criteriaMode: 'all' });
     const [passwordHidden, setPasswordHidden] = useState(true);
 
     const onSubmit = () => {
-
+        const data = {
+            username: getValues('emailusername'),
+            password: getValues('password')
+        };
+        signIn(data, signinCallback);
     };
 
-    //signIn(data, signinCallback);
+    const signinCallback = (err: string) => {
+        console.log(err);
+    };
 
 
     return (
@@ -40,7 +45,7 @@ const SignIn = ({ navigation }: Props) => {
                     </TouchableOpacity>
                 }
                 Right={
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
                         <View style={{ height: 22 }}>
                             <View style={{ flex: 1 }} />
                             <Text style={CSTYLE.bold}>
