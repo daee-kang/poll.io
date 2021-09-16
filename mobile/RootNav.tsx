@@ -8,8 +8,9 @@ import SignUp from './AuthScreens/SignUp';
 import { api, stringify, header } from './utils/api';
 
 import { AuthContext } from './Context/authContext';
-import StackNavigation from './Navigation/StackNavigation';
+import TabNavigation from './Navigation/TabNavigation';
 import AuthEntry from './AuthScreens/AuthEntry';
+import TabRoot from './Navigation/TabNavigation';
 
 const AuthStack = createStackNavigator();
 
@@ -130,7 +131,7 @@ export default function RootNav() {
             }}>
                 {state.userToken ?
 
-                    < StackNavigation />
+                    <TabRoot />
 
                     :
 
