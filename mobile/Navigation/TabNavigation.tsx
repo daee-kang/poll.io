@@ -72,15 +72,7 @@ const MyTab = () => {
                 component={CreatePlaceholder}
                 options={{
                     tabBarIcon: (props) => (
-                        <View style={{
-                            position: 'absolute',
-                            width: 50,
-                            height: 50,
-                            backgroundColor: COLORS.PRIMARY,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            borderRadius: 14,
-                        }}>
+                        <View style={styles.plusButton}>
                             <Entypo name="plus" size={35} color="white" />
                         </View>
                     ),
@@ -141,15 +133,23 @@ const styles = StyleSheet.create({
             width: 0,
             height: 1,
         },
-        shadowOpacity: 0.20,
+        shadowOpacity: 0.10,
         shadowRadius: 1.41,
-        elevation: 2,
+        elevation: 1,
     },
     tabButton: {
         width: '100%',
-        //backgroundColor: 'red',
         alignItems: 'center',
         top: 14,
+    },
+    plusButton: {
+        position: 'absolute',
+        width: 50,
+        height: 50,
+        backgroundColor: COLORS.PRIMARY,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 14,
     }
 });
 

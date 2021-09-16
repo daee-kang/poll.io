@@ -9,6 +9,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../Navigation/StackNavigation';
 import { apiGet, updateVoted, } from '../utils/api';
 import FeedFlatList from '../Components/FeedFlatList';
+import { COLORS } from '../Constants';
 
 export type HomeScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
@@ -51,7 +52,7 @@ const Home = (props: Props) => {
     };
 
     return (
-        <View>
+        <View style={{ backgroundColor: COLORS.LIGHTGRAY }}>
             <Header
                 navigation={navigation}
                 region={region}

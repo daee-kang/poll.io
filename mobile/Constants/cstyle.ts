@@ -6,7 +6,7 @@ const COLORS = {
     RED: "#FD5E5A",
     WHITE: '#FFFFFF',
     YELLOW: '#F9B406',
-    LIGHTGRAY: '#F8F8FB'
+    LIGHTGRAY: '#F8F8FB',
 };
 
 const FONTS = {
