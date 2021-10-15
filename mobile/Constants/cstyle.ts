@@ -18,7 +18,8 @@ const FONTS = {
 
 const STYLES = {
     BORDERRADIUS: 10,
-    PAGEPADDING: 20,
+    PAGEMARGIN: 16,
+    PADDING: 20,
 };
 
 const CSTYLE = StyleSheet.create({
@@ -34,8 +35,12 @@ const CSTYLE = StyleSheet.create({
     },
     bold: {
         fontFamily: FONTS.BOLD,
-        fontSize: 16,
         color: COLORS.TEXT
+    },
+    regular: {
+        fontFamily: FONTS.REGULAR,
+        fontSize: 14,
+        color: COLORS.TEXT,
     },
     normal: {
         fontFamily: FONTS.LIGHT,

@@ -45,7 +45,7 @@ const Poll = () => {
 
 const styles = StyleSheet.create({
     page: {
-        margin: STYLES.PAGEPADDING,
+        margin: STYLES.PAGEMARGIN,
         height: '100%'
     },
     header: {

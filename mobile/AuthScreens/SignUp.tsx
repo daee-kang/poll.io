@@ -5,8 +5,8 @@ import { AuthStackParamList } from '../App';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
 
 import { AuthContext } from '../Context/authContext';
-import StackHeader from '../Components/StackHeader';
-import { COLORS, CSTYLE } from '../Constants';
+import SpacedRow from '../Components/SpacedRow';
+import { COLORS, CSTYLE, STYLES } from '../Constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Controller, useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
@@ -36,7 +36,7 @@ const SignUp = ({ navigation }: Props) => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <StackHeader
+            <SpacedRow
                 Left={
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <AntDesign name="left" size={24} color="black" />
@@ -52,6 +52,7 @@ const SignUp = ({ navigation }: Props) => {
                         </View>
                     </TouchableOpacity>
                 }
+                style={{ padding: STYLES.PAGEMARGIN }}
             />
 
             <KeyboardAvoidingView

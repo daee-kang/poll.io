@@ -8,7 +8,7 @@ import { AntDesign, FontAwesome } from '@expo/vector-icons';
 
 
 import { AuthContext } from '../Context/authContext';
-import StackHeader from '../Components/StackHeader';
+import SpacedRow from '../Components/SpacedRow';
 import TouchButton from '../Components/TouchButton';
 import { ErrorMessage } from '@hookform/error-message';
 
@@ -38,7 +38,7 @@ const SignIn = ({ navigation }: Props) => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <StackHeader
+            <SpacedRow
                 Left={
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <AntDesign name="left" size={24} color="black" />
@@ -54,6 +54,7 @@ const SignIn = ({ navigation }: Props) => {
                         </View>
                     </TouchableOpacity>
                 }
+                style={{ padding: STYLES.PAGEMARGIN }}
             />
 
             <KeyboardAvoidingView

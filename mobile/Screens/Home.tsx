@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text } from 'react-native';
 import { Region } from 'react-native-maps';
-import Header from '../Components/Header';
-import { AuthContext } from '../Context/authContext';
 import * as Location from 'expo-location';
-import { useNavigation } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../Navigation/StackNavigation';
-import { apiGet, updateVoted, } from '../utils/api';
+import { updateVoted, } from '../utils/api';
 import FeedFlatList from '../Components/FeedFlatList';
-import { COLORS } from '../Constants';
+import { COLORS, CSTYLE, STYLES } from '../Constants';
+import SpacedRow from '../Components/SpacedRow';
+import { Feather } from '@expo/vector-icons';
+
 
 export type HomeScreenNavigationProp = StackNavigationProp<
     RootStackParamList,
@@ -21,9 +21,6 @@ interface Props {
 }
 
 const Home = (props: Props) => {
-    const { signOut } = useContext(AuthContext);
-    const navigation = useNavigation<HomeScreenNavigationProp>();
-
     const [region, setRegion] = useState<Region | undefined>();
 
     useEffect(() => {
@@ -53,11 +50,16 @@ const Home = (props: Props) => {
 
     return (
         <View style={{ backgroundColor: COLORS.LIGHTGRAY }}>
-            <Header
-                navigation={navigation}
-                region={region}
-                grabCurrentLocation={grabCurrentLocation}
-                updateRegion={updateRegion}
+            <SpacedRow
+                Left={
+                    <Text style={CSTYLE.title}>
+                        Home
+                    </Text>
+                }
+                Right={
+                    <Feather name="map" size={24} color={COLORS.TEXT} />
+                }
+                style={{ marginTop: 70, padding: STYLES.PAGEMARGIN }}
             />
 
             {/* <TouchableOpacity onPress={signOut}>
