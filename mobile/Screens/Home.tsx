@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Region } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -9,10 +9,12 @@ import FeedFlatList from '../Components/FeedFlatList';
 import { COLORS, CSTYLE, STYLES } from '../Constants';
 import SpacedRow from '../Components/SpacedRow';
 import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/core';
+import { HomeStackParamList } from '../Navigation/TabNavigation';
 
 
 export type HomeScreenNavigationProp = StackNavigationProp<
-    RootStackParamList,
+    HomeStackParamList,
     'home'
 >;
 
@@ -21,15 +23,12 @@ interface Props {
 }
 
 const Home = (props: Props) => {
+    const navigation = useNavigation<HomeScreenNavigationProp>();
     const [region, setRegion] = useState<Region | undefined>();
 
     useEffect(() => {
         updateVoted();
     }, []);
-
-    const updateRegion = (inRegion: Region) => {
-        setRegion(inRegion);
-    };
 
     const grabCurrentLocation = async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -57,7 +56,9 @@ const Home = (props: Props) => {
                     </Text>
                 }
                 Right={
-                    <Feather name="map" size={24} color={COLORS.TEXT} />
+                    <TouchableOpacity onPress={() => navigation.navigate('map', {region})}>
+                        <Feather name="map" size={24} color={COLORS.TEXT} />
+                    </TouchableOpacity>
                 }
                 style={{ marginTop: 70, padding: STYLES.PAGEMARGIN }}
             />

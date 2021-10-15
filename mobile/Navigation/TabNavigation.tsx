@@ -13,8 +13,7 @@ import { Feather, Entypo } from '@expo/vector-icons';
 export type HomeStackParamList = {
     home: undefined;
     map: {
-        region: Region | undefined,
-        updateRegion: (inRegion: Region) => void;
+        region: Region | undefined
     },
     poll: {
         poll: pollItem;

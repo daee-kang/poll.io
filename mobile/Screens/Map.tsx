@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import MapView, { Region, Circle } from 'react-native-maps';
+import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import MapView, { Region, PROVIDER_GOOGLE } from 'react-native-maps';
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/core';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../Navigation/StackNavigation';
+import { HomeStackParamList } from '../Navigation/TabNavigation';
+import { Feather } from '@expo/vector-icons'; 
+import { COLORS } from '../Constants';
+import mapStyle from '../Constants/mapstyle';
 
 export type MapScreenNavigationProp = StackNavigationProp<
-    RootStackParamList,
+    HomeStackParamList,
     'map'
 >;
 
 export type MapProps = {
     region: Region | undefined,
-    updateRegion: (inRegion: Region) => void;
 };
-
-interface Props {
-
-}
 
 export const defaultRegion: Region = {
     //TO-DO: change this to someething fun hehe
@@ -28,37 +26,29 @@ export const defaultRegion: Region = {
 };
 
 
-const Map = (props: Props) => {
+const Map = () => {
     const navigation = useNavigation<MapScreenNavigationProp>();
-    const route = useRoute<RouteProp<RootStackParamList, 'map'>>();
+    const route = useRoute<RouteProp<HomeStackParamList, 'map'>>();
 
-    const [radius, setRadius] = useState(4000);
     const [region, setRegion] = useState<Region | undefined>();
 
     useEffect(() => {
         setRegion(route.params.region ?? defaultRegion);
     }, []);
 
-    console.log(region);
-
     const goBack = () => {
-        route.params.updateRegion(region ?? defaultRegion);
         navigation.goBack();
     };
 
     return (
         <View>
-            <TouchableOpacity onPress={goBack}>
-                <Text style={{ backgroundColor: 'green', padding: 20 }}>
-                    go back
-                </Text>
-            </TouchableOpacity>
-
             <MapView
                 style={styles.map}
                 initialRegion={region}
                 region={region}
                 showsUserLocation={true}
+                provider={PROVIDER_GOOGLE}
+                customMapStyle={mapStyle}
                 onLongPress={(event) => {
                     setRegion({
                         latitude: event.nativeEvent.coordinate.latitude,
@@ -68,16 +58,11 @@ const Map = (props: Props) => {
                     });
                 }}
             >
-                {region && <Circle
-                    //the key has to be changed with state update or it won't show
-                    key={(region.latitude + region.longitude + radius).toString()}
-                    center={{ latitude: region.latitude, longitude: region.longitude }}
-                    radius={radius}
-                    strokeWidth={5}
-                    strokeColor={'#FF5733'}
-                    fillColor="rgba(255, 0, 0, 0.5)"
-                />}
             </MapView>
+
+            <TouchableOpacity onPress={goBack} style={styles.backButton}>
+                <Feather name="list" size={30} color={COLORS.TEXT} />
+            </TouchableOpacity>
         </View>
     );
 };
@@ -86,6 +71,18 @@ const styles = StyleSheet.create({
     map: {
         width: Dimensions.get("screen").width,
         height: Dimensions.get("screen").height
+    },
+    backButton: {
+        position: 'absolute',
+        top: 80,
+        right: 15,
+        width: 40,
+        height: 40,
+        borderRadius: 25,
+        backgroundColor: 'white',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 });
 
